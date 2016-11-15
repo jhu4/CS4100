@@ -1,0 +1,9 @@
+﻿  BaseGameEntity.cpp
+  main.cpp
+  Miner.cpp
+  MinerOwnedStates.cpp
+  MinersWife.cpp
+  MinersWifeOwnedStates.cpp
+  Generating Code...
+  WestWorldWithWomen.vcxproj -> S:\CS4100\src\WestWorld\WestWorldWithWomen\.\Debug\WestWorldWithWomen.exe
+  WestWorldWithWomen.vcxproj -> .\Debug/WestWorldWithWomen.pdb (Full PDB)

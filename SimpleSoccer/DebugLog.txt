@@ -1,0 +1,247 @@
+<<<<<<< HEAD
+Red entering Attacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Red entering Attacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuDefending state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuDefending state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Red entering Attacking state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuDefending state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Red entering Attacking state
+Red entering Attacking state
+Red entering Attacking state
+Red entering Attacking state
+Red entering Attacking state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuDefending state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuDefending state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Red entering Attacking state
+Red entering Attacking state
+Red entering Attacking state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Red entering Attacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Red entering Attacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuDefending state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Red entering Attacking state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefending state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefending state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefending state
+Red entering Attacking state
+Blue Hu entering HuDefensiveAttack state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Blue Hu entering HuAttacking state
+Blue Hu entering HuDefensiveAttack state
+Red entering Attacking state
+Game Over
+Red: 2 (3.301) = 2.00 
+Blue: 5 (2.942) = 5.00
+=======
+Player 2 enters wait state
+Player 3 enters wait state
+Player 4 enters wait state
+Player 5 enters wait state
+Player 7 enters mywait state
+Player 8 enters mywait state
+Player 9 enters mywait state
+Player 10 enters mywait state
+Player 3 enters chase state
+Player 9 enters mychase state
+Player 9 enters mykick state
+BlueBurke entering AggAttacking state
+Player 8 enters mysupport state
+Player 9 enters mydribble state
+Player 9 enters mychase state
+Player 9 enters mychase state
+Player 9 enters mykick state
+Player 9 enters mychase state
+Player 9 enters mykick state
+Player 9 enters mychase state
+Player 9 enters mykick state
+Player 9 enters mychase state
+Player 9 enters mykick state
+Player 9 enters mykick state
+Player 9 passes the ball with force 2.99976  to player 7  Target is  495.061 198.617
+Player 7 enters myreceive state (Using Arrive)
+Player 9 enters mywait state
+Player 7 received request from 9 to make pass
+Player 7 cannot make requested pass <cannot kick ball>
+Player 7 received request from 9 to make pass
+Player 7 cannot make requested pass <cannot kick ball>
+Player 7 enters mychase state
+Player 7 enters mykick state
+Player 7 enters mydribble state
+Player 7 enters mychase state
+Player 7 enters mychase state
+Player 7 enters mykick state
+Player 7 enters mychase state
+Player 7 enters mykick state
+Player 7 enters mychase state
+Player 7 enters mykick state
+Player 7 enters mychase state
+Player 7 enters mykick state
+Player 7 enters mychase state
+Player 7 enters mykick state
+Player 7 enters mychase state
+Player 7 enters mykick state
+Player 7 enters mykick state
+Player 7 enters mydribble state
+Player 7 enters mychase state
+Player 3 enters kick state
+BlueBurke entering AggDefending state
+Player 8 enters myReturnToHome state
+Red entering Attacking state
+Player 3 passes the ball with force 2.82961  to player 2  Target is  312.87 290.094
+Player 2 enters receive state (Using Arrive)
+Player 3 enters wait state
+Player 3 enters support state
+Player 7 enters myReturnToHome state
+Player 9 enters mychase state
+Player 2 enters chase state
+Player 2 enters kick state
+Player 2 enters dribble state
+Player 2 enters chase state
+Player 2 enters chase state
+Player 2 enters kick state
+Player 2 enters chase state
+Player 2 enters kick state
+Player 2 enters chase state
+Player 2 enters kick state
+Player 2 enters chase state
+Player 2 enters kick state
+Player 2 enters chase state
+Player 2 enters kick state
+Player 2 enters kick state
+Player 2 enters dribble state
+Player 2 enters chase state
+Player 2 enters kick state
+Player 2 passes the ball with force 2.99997  to player 5  Target is  217.107 128.331
+Player 5 enters receive state (Using Arrive)
+Player 2 enters wait state
+Player 5 received request from 4 to make pass
+Player 5 cannot make requested pass <cannot kick ball>
+Game Over
+Red: 0 (0.156) = 1.33 
+Blue: 0 (0.213) = 0.00
+>>>>>>> c4b9654db7364d58f930200457dc677c28e94fed
+
