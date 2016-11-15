@@ -30,23 +30,24 @@ public:
                                         Vector2D    dir,
                                         const PlayerBase* const opp,
                                         double kickingForce)const;
-<<<<<<< HEAD
 	//*
 	bool isBallInOurHalf();
-=======
->>>>>>> c4b9654db7364d58f930200457dc677c28e94fed
 protected:
 	std::string Name()const{if (m_Color == blue) return "Blue Hu"; return "Red Hu";}
 
+	//*Add two more characters in the team
+	PlayerBase* m_pGuader;
+	PlayerBase* m_pDefensiveAttacker;
+
+	//*The function to find guaders and defensive attackers
+	PlayerBase* DetermineBestGuader();
+	PlayerBase* DetermineDefensiveAttacker();
+	
 	void InitStateMachine();
 	void CreatePlayers();
 	void InitPlayers();
 	void prepareForKickoff();
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> c4b9654db7364d58f930200457dc677c28e94fed
   void UpdateTargetsOfWaitingPlayers()const;
 };
 

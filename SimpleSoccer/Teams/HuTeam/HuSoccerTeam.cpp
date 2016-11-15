@@ -1,19 +1,15 @@
 #include "HuSoccerTeam.h"
 #include "HuTeamStates.h"
+#include "HuFieldPlayer.h"
 #include "../../SoccerPitch.h"
 #include "../../Goal.h"
 #include "../../ParamLoader.h"
 #include "FSM/StateMachine.h"
 #include "../../Goalkeeper.h"
 #include "../BucklandTeam/GoalKeeperStates.h"
-#include "../../FieldPlayer.h"
 #include "../../SteeringBehaviors.h"
 #include "HuPlayerStates.h"
-<<<<<<< HEAD
 #include "Debug/DebugConsole.h"
-=======
-
->>>>>>> c4b9654db7364d58f930200457dc677c28e94fed
 
 //----------------------------- ctor -------------------------------------
 //
@@ -68,7 +64,7 @@ void HuSoccerTeam::CreatePlayers()
                                Prm.PlayerScale));
  
     //create the players
-    m_Players.push_back(new FieldPlayer(this,
+    m_Players.push_back(new HuFieldPlayer(this,
                                4,
                                HuWait::Instance(),
 							   HuGlobalPlayerState::Instance(),
@@ -83,7 +79,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
 
-        m_Players.push_back(new FieldPlayer(this,
+        m_Players.push_back(new HuFieldPlayer(this,
                                8,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -100,7 +96,7 @@ void HuSoccerTeam::CreatePlayers()
  
 
 
-        m_Players.push_back(new FieldPlayer(this,
+        m_Players.push_back(new HuFieldPlayer(this,
                                7,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -114,7 +110,7 @@ void HuSoccerTeam::CreatePlayers()
                                PlayerBase::defender));
 
 
-        m_Players.push_back(new FieldPlayer(this,
+        m_Players.push_back(new HuFieldPlayer(this,
                                6,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -147,7 +143,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
     //create the players
-    m_Players.push_back(new FieldPlayer(this,
+    m_Players.push_back(new HuFieldPlayer(this,
                                13,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -160,7 +156,7 @@ void HuSoccerTeam::CreatePlayers()
                                Prm.PlayerScale,
                                PlayerBase::attacker));
 
-    m_Players.push_back(new FieldPlayer(this,
+    m_Players.push_back(new HuFieldPlayer(this,
                                11,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -175,7 +171,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
  
-    m_Players.push_back(new FieldPlayer(this,
+    m_Players.push_back(new HuFieldPlayer(this,
                                10,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -189,7 +185,7 @@ void HuSoccerTeam::CreatePlayers()
                                PlayerBase::defender));
 
 
-    m_Players.push_back(new FieldPlayer(this,
+    m_Players.push_back(new HuFieldPlayer(this,
                                9,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -329,7 +325,7 @@ void HuSoccerTeam::UpdateTargetsOfWaitingPlayers()const
     if ( (*it)->Role() != PlayerBase::goal_keeper )
     {
       //cast to a field player
-      FieldPlayer* plyr = static_cast<FieldPlayer*>(*it);
+      HuFieldPlayer* plyr = static_cast<HuFieldPlayer*>(*it);
       
       if ( plyr->GetFSM()->isInState(*HuWait::Instance()) ||
            plyr->GetFSM()->isInState(*HuReturnToHomeRegion::Instance()) )
@@ -338,11 +334,10 @@ void HuSoccerTeam::UpdateTargetsOfWaitingPlayers()const
       }
     }
   }
-<<<<<<< HEAD
 }
 
 
-//*
+//*-----------------------Hu Added Functions------------------------------------
 bool HuSoccerTeam::isBallInOurHalf() {
 	Vector2D ballpos=Pitch()->m_pBall->Pos();
 	double pitchWidth=Pitch()->PlayingArea()->Width();
@@ -358,6 +353,25 @@ bool HuSoccerTeam::isBallInOurHalf() {
 	else {
 		return false;
 	}
-=======
->>>>>>> c4b9654db7364d58f930200457dc677c28e94fed
+}
+
+PlayerBase* HuSoccerTeam::DetermineBestGuader() {
+	PlayerBase* BestPlayer = NULL;
+	std::vector<PlayerBase*>::iterator it = m_Players.begin();
+
+	for (it; it != m_Players.end(); ++it)
+	{
+		//only attackers utilize the BestSupportingSpot
+		if (((*it)->Role() == PlayerBase::attacker) && ((*it) != m_pControllingPlayer))
+		{
+			
+		}
+	}
+
+	return BestPlayer;
+
+}
+PlayerBase* HuSoccerTeam::DetermineDefensiveAttacker() {
+	PlayerBase* BestPlayer = NULL;
+	return BestPlayer;
 }

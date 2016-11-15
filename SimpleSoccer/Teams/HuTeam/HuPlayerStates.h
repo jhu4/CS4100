@@ -2,7 +2,7 @@
 #define HUPLAYERSTATES_H
 //------------------------------------------------------------------------
 //
-//  Name: FieldPlayerStates.h
+//  Name: HuFieldPlayerStates.h
 //
 //  Desc: States for the field players of Simple Soccer. See my book
 //        for detailed descriptions
@@ -18,13 +18,13 @@
 #include "../../constants.h"
 
 
-class FieldPlayer;
+class HuFieldPlayer;
 class SoccerPitch;
 
 
 
 //------------------------------------------------------------------------
-class HuGlobalPlayerState : public State<FieldPlayer>
+class HuGlobalPlayerState : public State<HuFieldPlayer>
 {
 private:
   
@@ -35,19 +35,19 @@ public:
   //this is a singleton
   static HuGlobalPlayerState* Instance();
 
-  void Enter(FieldPlayer* player){}
+  void Enter(HuFieldPlayer* player){}
 
-  void Execute(FieldPlayer* player);
+  void Execute(HuFieldPlayer* player);
 
-  void Exit(FieldPlayer* player){}
+  void Exit(HuFieldPlayer* player){}
 
-  bool OnMessage(FieldPlayer*, const Telegram&);
+  bool OnMessage(HuFieldPlayer*, const Telegram&);
 };
 
 
 
 //------------------------------------------------------------------------
-class HuChaseBall : public State<FieldPlayer>
+class HuChaseBall : public State<HuFieldPlayer>
 {
 private:
   
@@ -58,17 +58,17 @@ public:
   //this is a singleton
   static HuChaseBall* Instance();
 
-  void Enter(FieldPlayer* player);
+  void Enter(HuFieldPlayer* player);
 
-  void Execute(FieldPlayer* player);
+  void Execute(HuFieldPlayer* player);
 
-  void Exit(FieldPlayer* player);
+  void Exit(HuFieldPlayer* player);
 
-  bool OnMessage(FieldPlayer*, const Telegram&){return false;}
+  bool OnMessage(HuFieldPlayer*, const Telegram&){return false;}
 };
 
 //------------------------------------------------------------------------
-class HuDribble : public State<FieldPlayer>
+class HuDribble : public State<HuFieldPlayer>
 {
 private:
   
@@ -79,18 +79,18 @@ public:
   //this is a singleton
   static HuDribble* Instance();
 
-  void Enter(FieldPlayer* player);
+  void Enter(HuFieldPlayer* player);
 
-  void Execute(FieldPlayer* player);
+  void Execute(HuFieldPlayer* player);
 
-  void Exit(FieldPlayer* player){}
+  void Exit(HuFieldPlayer* player){}
 
-  bool OnMessage(FieldPlayer*, const Telegram&){return false;}
+  bool OnMessage(HuFieldPlayer*, const Telegram&){return false;}
 };
 
 
 //------------------------------------------------------------------------
-class HuReturnToHomeRegion: public State<FieldPlayer>
+class HuReturnToHomeRegion: public State<HuFieldPlayer>
 {
 private:
   
@@ -101,17 +101,17 @@ public:
   //this is a singleton
   static HuReturnToHomeRegion* Instance();
 
-  void Enter(FieldPlayer* player);
+  void Enter(HuFieldPlayer* player);
 
-  void Execute(FieldPlayer* player);
+  void Execute(HuFieldPlayer* player);
 
-  void Exit(FieldPlayer* player);
+  void Exit(HuFieldPlayer* player);
 
-  bool OnMessage(FieldPlayer*, const Telegram&){return false;}
+  bool OnMessage(HuFieldPlayer*, const Telegram&){return false;}
 };
 
 //------------------------------------------------------------------------
-class HuWait: public State<FieldPlayer>
+class HuWait: public State<HuFieldPlayer>
 {
 private:
   
@@ -122,17 +122,17 @@ public:
   //this is a singleton
   static HuWait* Instance();
 
-  void Enter(FieldPlayer* player);
+  void Enter(HuFieldPlayer* player);
 
-  void Execute(FieldPlayer* player);
+  void Execute(HuFieldPlayer* player);
 
-  void Exit(FieldPlayer* player);
+  void Exit(HuFieldPlayer* player);
 
-  bool OnMessage(FieldPlayer*, const Telegram&){return false;}
+  bool OnMessage(HuFieldPlayer*, const Telegram&){return false;}
 };
 
 //------------------------------------------------------------------------
-class HuKickBall: public State<FieldPlayer>
+class HuKickBall: public State<HuFieldPlayer>
 {
 private:
   
@@ -143,17 +143,17 @@ public:
   //this is a singleton
   static HuKickBall* Instance();
 
-  void Enter(FieldPlayer* player);
+  void Enter(HuFieldPlayer* player);
 
-  void Execute(FieldPlayer* player);
+  void Execute(HuFieldPlayer* player);
 
-  void Exit(FieldPlayer* player){}
+  void Exit(HuFieldPlayer* player){}
 
-  bool OnMessage(FieldPlayer*, const Telegram&){return false;}
+  bool OnMessage(HuFieldPlayer*, const Telegram&){return false;}
 };
 
 //------------------------------------------------------------------------
-class HuReceiveBall: public State<FieldPlayer>
+class HuReceiveBall: public State<HuFieldPlayer>
 {
 private:
   
@@ -164,18 +164,18 @@ public:
   //this is a singleton
   static HuReceiveBall* Instance();
 
-  void Enter(FieldPlayer* player);
+  void Enter(HuFieldPlayer* player);
 
-  void Execute(FieldPlayer* player);
+  void Execute(HuFieldPlayer* player);
 
-  void Exit(FieldPlayer* player);
+  void Exit(HuFieldPlayer* player);
 
-  bool OnMessage(FieldPlayer*, const Telegram&){return false;}
+  bool OnMessage(HuFieldPlayer*, const Telegram&){return false;}
 };
 
 
 //------------------------------------------------------------------------
-class HuSupportAttacker: public State<FieldPlayer>
+class HuSupportAttacker: public State<HuFieldPlayer>
 {
 private:
   
@@ -186,13 +186,13 @@ public:
   //this is a singleton
   static HuSupportAttacker* Instance();
 
-  void Enter(FieldPlayer* player);
+  void Enter(HuFieldPlayer* player);
 
-  void Execute(FieldPlayer* player);
+  void Execute(HuFieldPlayer* player);
 
-  void Exit(FieldPlayer* player);
+  void Exit(HuFieldPlayer* player);
 
-  bool OnMessage(FieldPlayer*, const Telegram&){return false;}
+  bool OnMessage(HuFieldPlayer*, const Telegram&){return false;}
 };
 
 

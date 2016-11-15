@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 #ifndef HUTEAMSTATES_H
 #define HUTEAMSTATES_H
-=======
-#ifndef HuTEAMSTATES_H
-#define HuTEAMSTATES_H
->>>>>>> c4b9654db7364d58f930200457dc677c28e94fed
 //------------------------------------------------------------------------
 //
 //  Name: HuTeamStates.h
@@ -90,7 +85,6 @@ public:
   bool OnMessage(AbstSoccerTeam*, const Telegram&){return false;}
 };
 
-<<<<<<< HEAD
 //------------------------------------------------------------------------
 class HuDefensiveAttack : public State<AbstSoccerTeam>
 { 
@@ -111,7 +105,5 @@ public:
 
   bool OnMessage(AbstSoccerTeam*, const Telegram&){return false;}
 };
-=======
->>>>>>> c4b9654db7364d58f930200457dc677c28e94fed
 
 #endif

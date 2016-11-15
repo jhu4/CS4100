@@ -7,7 +7,7 @@
 #include "HuSoccerTeam.h"
 #include "../../Goal.h"
 #include "2D/geometry.h"
-#include "../../FieldPlayer.h"
+#include "HuFieldPlayer.h"
 #include "../../ParamLoader.h"
 #include "Messaging/Telegram.h"
 #include "Messaging/MessageDispatcher.h"
@@ -15,7 +15,7 @@
 
 
 //uncomment to send state info to debug window
-//#define GOALY_STATE_INFO_ON
+#define HUGOALY_STATE_INFO_ON
 
 
 //--------------------------- HuGlobalKeeperState -------------------------------
@@ -183,7 +183,7 @@ void HuInterceptBall::Enter(GoalKeeper* keeper)
 {
   keeper->Steering()->PursuitOn();  
 
-    #ifdef GOALY_STATE_INFO_ON
+    #ifdef HUGOALY_STATE_INFO_ON
     debug_con << "Goaly " << keeper->ID() << " enters HuInterceptBall" <<  "";
     #endif
 }
