@@ -1,14 +1,16 @@
 #include "HuSoccerTeam.h"
 #include "HuTeamStates.h"
+#include "HuPlayerStates.h"
+#include "HuGoalKeeperStates.h"
+
 #include "../../SoccerPitch.h"
 #include "../../Goal.h"
 #include "../../ParamLoader.h"
 #include "FSM/StateMachine.h"
 #include "../../Goalkeeper.h"
-#include "../BucklandTeam/GoalKeeperStates.h"
 #include "../../FieldPlayer.h"
 #include "../../SteeringBehaviors.h"
-#include "HuPlayerStates.h"
+
 
 
 //----------------------------- ctor -------------------------------------
@@ -53,8 +55,8 @@ void HuSoccerTeam::CreatePlayers()
     //goalkeeper
     m_Players.push_back(new GoalKeeper(this,
                                1,
-                               TendGoal::Instance(),
-                               GlobalKeeperState::Instance(),
+                               HuTendGoal::Instance(),
+                               HuGlobalKeeperState::Instance(),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                Prm.PlayerMass,
@@ -131,8 +133,8 @@ void HuSoccerTeam::CreatePlayers()
      //goalkeeper
     m_Players.push_back(new GoalKeeper(this,
                                16,
-                               TendGoal::Instance(),
-                               GlobalKeeperState::Instance(),
+                               HuTendGoal::Instance(),
+                               HuGlobalKeeperState::Instance(),
                                Vector2D(0,-1),
                                Vector2D(0.0, 0.0),
                                Prm.PlayerMass,
@@ -354,6 +356,7 @@ bool HuSoccerTeam::isBallInOurHalf() {
 	}
 }
 
+//*
 PlayerBase* HuSoccerTeam::DetermineBestSupportingAttacker()
 {
 	double ClosestSoFar = MaxFloat;

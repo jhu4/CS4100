@@ -1,5 +1,7 @@
 #include "HuPlayerStates.h"
 #include "HuSoccerTeam.h"
+#include "HuSoccerMessages.h"
+
 #include "Debug/DebugConsole.h"
 #include "../../SoccerPitch.h"
 #include "../../FieldPlayer.h"
@@ -11,14 +13,14 @@
 #include "../../ParamLoader.h"
 #include "Messaging/Telegram.h"
 #include "Messaging/MessageDispatcher.h"
-#include "../../SoccerMessages.h"
+
 
 #include "time/Regulator.h"
 
 
 //uncomment below to send state info to the debug window
 //#define HUPLAYER_STATE_INFO_ON
-
+#define HUSTRATEGYIC_STATE_INFO_ON
 
 //************************************************************************ Global state
 
@@ -65,6 +67,9 @@ bool HuGlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegra
 
   case Msg_SupportAttacker:
     {
+		#ifdef HUSTRATEGYIC_STATE_INFO_ON
+				debug_con << "Player " << player->ID() << " received Msg " <<" SupportAttacker" << "";
+		#endif
       //if already supporting just return
       if (player->GetFSM()->isInState(*HuSupportAttacker::Instance()))
       {
@@ -109,7 +114,7 @@ bool HuGlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegra
       //get the position of the player requesting the pass 
       FieldPlayer* receiver = static_cast<FieldPlayer*>(telegram.ExtraInfo);
 
-      #ifdef HUPLAYER_STATE_INFO_ON
+      #ifdef HUSTRATEGYIC_STATE_INFO_ON
       debug_con << "Player " << player->ID() << " received request from " <<
                     receiver->ID() << " to make pass" << "";
       #endif
@@ -132,7 +137,7 @@ bool HuGlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegra
                            Prm.MaxPassingForce);
 
           
-     #ifdef HUPLAYER_STATE_INFO_ON
+     #ifdef HUSTRATEGYIC_STATE_INFO_ON
      debug_con << "Player " << player->ID() << " Passed ball to requesting player" << "";
      #endif
         
