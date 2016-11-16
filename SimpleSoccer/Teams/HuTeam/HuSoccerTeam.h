@@ -40,7 +40,8 @@ protected:
 	void InitPlayers();
 	void prepareForKickoff();
 	
-  void UpdateTargetsOfWaitingPlayers()const;
+    void UpdateTargetsOfWaitingPlayers()const;
+	PlayerBase* DetermineBestSupportingAttacker();
 };
 
 #endif

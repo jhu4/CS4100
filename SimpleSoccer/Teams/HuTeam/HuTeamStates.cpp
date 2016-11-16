@@ -10,6 +10,7 @@
 
 #include "Debug/DebugConsole.h"
 
+#define DEBUG_HUTEAM_STATES
 
 //************************************************************************ ATTACKING
 
@@ -23,7 +24,7 @@ HuAttacking* HuAttacking::Instance()
 
 void HuAttacking::Enter(AbstSoccerTeam* team)
 {
-//#ifdef DEBUG_TEAM_STATES
+//#ifdef DEBUG_HUTEAM_STATES
   debug_con << team->Name() << " entering HuAttacking state" << "";
 //#endif
 
@@ -83,7 +84,7 @@ HuDefending* HuDefending::Instance()
 
 void HuDefending::Enter(AbstSoccerTeam* team)
 {
-#ifdef DEBUG_TEAM_STATES
+#ifdef DEBUG_HUTEAM_STATES
   debug_con << team->Name() << " entering HuDefending state" << "";
 #endif
 
@@ -132,6 +133,9 @@ HuPrepareForKickOff* HuPrepareForKickOff::Instance()
 
 void HuPrepareForKickOff::Enter(AbstSoccerTeam* team)
 {
+#ifdef DEBUG_HUTEAM_STATES
+	debug_con << team->Name() << " entering HuPrepareForKickOff state" << "";
+#endif
   //reset key player pointers
   team->SetControllingPlayer(NULL);
   team->SetSupportingPlayer(NULL);

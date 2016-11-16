@@ -353,3 +353,34 @@ bool HuSoccerTeam::isBallInOurHalf() {
 		return false;
 	}
 }
+
+PlayerBase* HuSoccerTeam::DetermineBestSupportingAttacker()
+{
+	double ClosestSoFar = MaxFloat;
+
+	PlayerBase* BestPlayer = NULL;
+
+	std::vector<PlayerBase*>::iterator it = m_Players.begin();
+
+	for (it; it != m_Players.end(); ++it)
+	{
+		
+		if (((*it)->Role() != PlayerBase::goal_keeper) && ((*it) != m_pControllingPlayer))
+		{
+			//calculate the dist. Use the squared value to avoid sqrt
+			double dist = Vec2DDistanceSq((*it)->Pos(), m_pSupportSpotCalc->GetBestSupportingSpot());
+
+			//if the distance is the closest so far and the player is not a
+			//goalkeeper and the player is not the one currently controlling
+			//the ball, keep a record of this player
+			if ((dist < ClosestSoFar))
+			{
+				ClosestSoFar = dist;
+
+				BestPlayer = (*it);
+			}
+		}
+	}
+
+	return BestPlayer;
+}
