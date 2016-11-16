@@ -1,16 +1,15 @@
 #include "HuSoccerTeam.h"
 #include "HuTeamStates.h"
-#include "HuFieldPlayer.h"
-#include "HuGoalKeeperStates.h"
-
 #include "../../SoccerPitch.h"
 #include "../../Goal.h"
 #include "../../ParamLoader.h"
 #include "FSM/StateMachine.h"
 #include "../../Goalkeeper.h"
+#include "../BucklandTeam/GoalKeeperStates.h"
+#include "../../FieldPlayer.h"
 #include "../../SteeringBehaviors.h"
 #include "HuPlayerStates.h"
-#include "Debug/DebugConsole.h"
+
 
 //----------------------------- ctor -------------------------------------
 //
@@ -23,7 +22,7 @@ HuSoccerTeam::HuSoccerTeam(Goal*        home_goal,
 
 {
   InitStateMachine ();
-  InitStateMachine();
+  	InitStateMachine();
 	CreatePlayers();
 	RegisterPlayers();
 	InitPlayers();    
@@ -51,11 +50,11 @@ void HuSoccerTeam::CreatePlayers()
 {
   if (Color() == blue)
   {
-    //Hugoalkeeper
+    //goalkeeper
     m_Players.push_back(new GoalKeeper(this,
                                1,
-                               HuTendGoal::Instance(),
-                               HuGlobalKeeperState::Instance(),
+                               TendGoal::Instance(),
+                               GlobalKeeperState::Instance(),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                Prm.PlayerMass,
@@ -65,7 +64,7 @@ void HuSoccerTeam::CreatePlayers()
                                Prm.PlayerScale));
  
     //create the players
-    m_Players.push_back(new HuFieldPlayer(this,
+    m_Players.push_back(new FieldPlayer(this,
                                4,
                                HuWait::Instance(),
 							   HuGlobalPlayerState::Instance(),
@@ -80,7 +79,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
 
-        m_Players.push_back(new HuFieldPlayer(this,
+        m_Players.push_back(new FieldPlayer(this,
                                8,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -97,7 +96,7 @@ void HuSoccerTeam::CreatePlayers()
  
 
 
-        m_Players.push_back(new HuFieldPlayer(this,
+        m_Players.push_back(new FieldPlayer(this,
                                7,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -111,7 +110,7 @@ void HuSoccerTeam::CreatePlayers()
                                PlayerBase::defender));
 
 
-        m_Players.push_back(new HuFieldPlayer(this,
+        m_Players.push_back(new FieldPlayer(this,
                                6,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -129,11 +128,11 @@ void HuSoccerTeam::CreatePlayers()
   else
   {
 
-     //Hugoalkeeper
+     //goalkeeper
     m_Players.push_back(new GoalKeeper(this,
                                16,
-                               HuTendGoal::Instance(),
-                               HuGlobalKeeperState::Instance(),
+                               TendGoal::Instance(),
+                               GlobalKeeperState::Instance(),
                                Vector2D(0,-1),
                                Vector2D(0.0, 0.0),
                                Prm.PlayerMass,
@@ -144,7 +143,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
     //create the players
-    m_Players.push_back(new HuFieldPlayer(this,
+    m_Players.push_back(new FieldPlayer(this,
                                13,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -157,7 +156,7 @@ void HuSoccerTeam::CreatePlayers()
                                Prm.PlayerScale,
                                PlayerBase::attacker));
 
-    m_Players.push_back(new HuFieldPlayer(this,
+    m_Players.push_back(new FieldPlayer(this,
                                11,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -172,7 +171,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
  
-    m_Players.push_back(new HuFieldPlayer(this,
+    m_Players.push_back(new FieldPlayer(this,
                                10,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -186,7 +185,7 @@ void HuSoccerTeam::CreatePlayers()
                                PlayerBase::defender));
 
 
-    m_Players.push_back(new HuFieldPlayer(this,
+    m_Players.push_back(new FieldPlayer(this,
                                9,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
@@ -337,121 +336,20 @@ void HuSoccerTeam::UpdateTargetsOfWaitingPlayers()const
   }
 }
 
-
-//*-----------------------Hu Added Functions------------------------------------
+//*determine if the ball is in our half
 bool HuSoccerTeam::isBallInOurHalf() {
-	Vector2D ballpos=Pitch()->m_pBall->Pos();
-	double pitchWidth=Pitch()->PlayingArea()->Width();
-	
+	Vector2D ballpos = Pitch()->m_pBall->Pos();
+	double pitchWidth = Pitch()->PlayingArea()->Width();
+
 	double scale = 0.5;
-	
-	if (ballpos.x-(scale*pitchWidth)>0 && Color() == AbstSoccerTeam::blue) { 
+
+	if (ballpos.x - (scale*pitchWidth)>0 && Color() == AbstSoccerTeam::blue) {
 		return true;
 	}
-	else if(ballpos.x-(scale*pitchWidth)<0 && Color() == AbstSoccerTeam::red) {
+	else if (ballpos.x - (scale*pitchWidth)<0 && Color() == AbstSoccerTeam::red) {
 		return true;
 	}
 	else {
 		return false;
 	}
-}
-
-PlayerBase* HuSoccerTeam::DetermineBestGuarder() {
-	debug_con << "HuSoccerTeam::DetermineBestGuarder()" << "";
-
-	double ClosestSoFar = MaxFloat;
-
-	PlayerBase* BestPlayer = NULL;
-
-	std::vector<PlayerBase*>::iterator it = m_Players.begin();
-
-	for (it; it != m_Players.end(); ++it)
-	{
-
-		//only defenders can be a guarder
-		if (((*it)->Role() == PlayerBase::defender) && ((*it) != m_pControllingPlayer))
-		{
-			
-			//calculate the dist. Use the squared value to avoid sqrt
-			double dist = ((*it))->DistToHomeGoal();
-
-			//if the distance is the closest so far and the player is not a
-			//goalkeeper and the player is not the one currently controlling
-			//the ball, keep a record of this player
-			if ((dist < ClosestSoFar))
-			{
-				ClosestSoFar = dist;
-
-				BestPlayer = (*it);
-			}
-		}
-	}
-
-	return BestPlayer;
-
-}
-PlayerBase* HuSoccerTeam::DetermineBestDefensiveAttacker() {
-	debug_con << "HuSoccerTeam::DetermineBestDefensiveAttacker()" << "";
-	double ClosestSoFar = MaxFloat;
-
-	PlayerBase* BestPlayer = NULL;
-
-	std::vector<PlayerBase*>::iterator it = m_Players.begin();
-
-	for (it; it != m_Players.end(); ++it)
-	{
-
-		//only defenders can be a defensive attacker
-		if (((*it)->Role() == PlayerBase::defender) && ((*it) != m_pControllingPlayer))
-		{
-			
-			//calculate the dist btw a defender and the opponent controlling player
-			double dist = Vec2DDistanceSq((*it)->Pos(), Opponents()->ControllingPlayer()->Pos());
-
-			//if the distance is the closest so far and the player is not a
-			//goalkeeper and the player is not the one currently controlling
-			//the ball, keep a record of this player
-			if ((dist < ClosestSoFar))
-			{
-				ClosestSoFar = dist;
-
-				BestPlayer = (*it);
-			}
-		}
-	}
-
-	return BestPlayer;
-}
-
-
-PlayerBase* HuSoccerTeam::DetermineBestDefender() {
-	debug_con << "HuSoccerTeam::DetermineBestDefender()" << "";
-	double ClosestSoFar = MaxFloat;
-
-	PlayerBase* BestPlayer = NULL;
-
-	std::vector<PlayerBase*>::iterator it = m_Players.begin();
-
-	for (it; it != m_Players.end(); ++it)
-	{
-
-		if (((*it)->Role() == PlayerBase::defender) && ((*it) != m_pControllingPlayer))
-		{
-
-			//calculate the dist btw a defender and the opponent Supporting Player
-			double dist = Vec2DDistanceSq((*it)->Pos(), Opponents()->SupportingPlayer()->Pos());
-
-			//if the distance is the closest so far and the player is not a
-			//goalkeeper and the player is not the one currently controlling
-			//the ball, keep a record of this player
-			if ((dist < ClosestSoFar))
-			{
-				ClosestSoFar = dist;
-
-				BestPlayer = (*it);
-			}
-		}
-	}
-
-	return BestPlayer;
 }

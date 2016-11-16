@@ -1,5 +1,5 @@
-#ifndef HUTEAMSTATES_H
-#define HUTEAMSTATES_H
+#ifndef HuTEAMSTATES_H
+#define HuTEAMSTATES_H
 //------------------------------------------------------------------------
 //
 //  Name: HuTeamStates.h
@@ -7,7 +7,7 @@
 //  Desc: Subclass that only changes the home regions for a more aggressive
 //        style of play
 //
-//  Author: Jinan Hu 2016 (jhu4@wpi.edu)
+//  Author: Robin Hu 2005 (rHu@cs.depaul.edu)
 //
 //------------------------------------------------------------------------
 #include <string>
@@ -85,25 +85,28 @@ public:
   bool OnMessage(AbstSoccerTeam*, const Telegram&){return false;}
 };
 
-//------------------------------------------------------------------------
+
+//***************************************************************
 class HuDefensiveAttack : public State<AbstSoccerTeam>
-{ 
+{
 private:
-  
-  HuDefensiveAttack(){}
+
+	HuDefensiveAttack() {}
 
 public:
 
-    //this is a singleton
-  static HuDefensiveAttack* Instance();
-  
-  void Enter(AbstSoccerTeam* team);
+	//this is a singleton
+	static HuDefensiveAttack* Instance();
 
-  void Execute(AbstSoccerTeam* team);
+	void Enter(AbstSoccerTeam* team);
 
-  void Exit(AbstSoccerTeam* team);
+	void Execute(AbstSoccerTeam* team);
 
-  bool OnMessage(AbstSoccerTeam*, const Telegram&){return false;}
+	void Exit(AbstSoccerTeam* team);
+
+	bool OnMessage(AbstSoccerTeam*, const Telegram&) { return false; }
 };
+
+
 
 #endif

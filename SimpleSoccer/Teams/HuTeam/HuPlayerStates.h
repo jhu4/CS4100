@@ -7,7 +7,8 @@
 //  Desc: States for the field players of Simple Soccer. See my book
 //        for detailed descriptions
 //
-//  Author: Jinan Hu 2016 (jhu4@wpi.edu)
+//  Author: Mat Buckland 2003 (fup@ai-junkie.com)
+//  9/15/2006 RB Customized for my team
 //
 //------------------------------------------------------------------------
 
@@ -195,70 +196,8 @@ public:
   bool OnMessage(FieldPlayer*, const Telegram&){return false;}
 };
 
-//*
-//------------------------------------------------------------------------
-class HuDefensiveAttacker : public State<FieldPlayer>
-{
-private:
-
-	HuDefensiveAttacker() {}
-
-public:
-
-	//this is a singleton
-	static HuDefensiveAttacker* Instance();
-
-	void Enter(FieldPlayer* player);
-
-	void Execute(FieldPlayer* player);
-
-	void Exit(FieldPlayer* player);
-
-	bool OnMessage(FieldPlayer*, const Telegram&) { return false; }
-};
 
 
-//*
-class HuGuarder : public State<FieldPlayer>
-{
-private:
 
-	HuGuarder() {}
-
-public:
-
-	//this is a singleton
-	static HuGuarder* Instance();
-
-	void Enter(FieldPlayer* player);
-
-	void Execute(FieldPlayer* player);
-
-	void Exit(FieldPlayer* player);
-
-	bool OnMessage(FieldPlayer*, const Telegram&) { return false; }
-};
-
-
-//*
-class HuDefender : public State<FieldPlayer>
-{
-private:
-
-	HuDefender() {}
-
-public:
-
-	//this is a singleton
-	static HuDefender* Instance();
-
-	void Enter(FieldPlayer* player);
-
-	void Execute(FieldPlayer* player);
-
-	void Exit(FieldPlayer* player);
-
-	bool OnMessage(FieldPlayer*, const Telegram&) { return false; }
-};
   
 #endif

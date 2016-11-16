@@ -1,5 +1,5 @@
-#ifndef HUSOCCERTEAMMAKER_H
-#define HUSOCCERTEAMMAKER_H
+#ifndef HuSOCCERTEAMMAKER_H
+#define HuSOCCERTEAMMAKER_H
 #pragma warning (disable:4786)
 
 //------------------------------------------------------------------------
@@ -8,7 +8,7 @@
 //
 //  Desc:   Factory class for SoccerTeam. 
 //
-//  Author: Jinan Hu 2016 (jhu4@wpi.edu)
+//  Author: Robin Hu 2005 rHu@cs.depaul.edu
 //
 //------------------------------------------------------------------------
 

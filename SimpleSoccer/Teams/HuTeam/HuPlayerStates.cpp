@@ -1,11 +1,8 @@
 #include "HuPlayerStates.h"
 #include "HuSoccerTeam.h"
-#include "HuFieldPlayer.h"
-#include "../../FieldPlayer.h"
-#include "HuSoccerMessages.h"
-
 #include "Debug/DebugConsole.h"
 #include "../../SoccerPitch.h"
+#include "../../FieldPlayer.h"
 #include "../../SteeringBehaviors.h"
 #include "../../AbstSoccerTeam.h"
 #include "../../Goal.h"
@@ -14,6 +11,7 @@
 #include "../../ParamLoader.h"
 #include "Messaging/Telegram.h"
 #include "Messaging/MessageDispatcher.h"
+#include "../../SoccerMessages.h"
 
 #include "time/Regulator.h"
 
@@ -84,56 +82,6 @@ bool HuGlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegra
 
     break;
 
-	//*
-  case Msg_DefensiveAttacker:
-  {
-	  //if already supporting just return
-	  if (player->GetFSM()->isInState(*HuDefensiveAttacker::Instance()))
-	  {
-		  return true;
-	  }
-
-	  //change the state
-	  player->GetFSM()->ChangeState(HuDefensiveAttacker::Instance());
-
-	  return true;
-  }
-
-  break;
-
-  case Msg_Guarder:
-  {
-	  //if already supporting just return
-	  if (player->GetFSM()->isInState(*HuGuarder::Instance()))
-	  {
-		  return true;
-	  }
-		
-	 // if (player->Team()->Color() == AbstSoccerTeam::blue) {
-	//	  player->Steering()->SetTarget()
-	 // }
-	  //change the state
-	  player->GetFSM()->ChangeState(HuGuarder::Instance());
-
-	  return true;
-  }
-
-  case Msg_Defender:
-  {
-	  //if already supporting just return
-	  if (player->GetFSM()->isInState(*HuDefender::Instance()))
-	  {
-		  return true;
-	  }
-
-
-	  //change the state
-	  player->GetFSM()->ChangeState(HuDefender::Instance());
-
-	  return true;
-  }
-
-  break;
  case Msg_Wait:
     {
       //change the state
@@ -309,7 +257,7 @@ void HuSupportAttacker::Execute(FieldPlayer* player)
   if( player->Team()->CanShoot(player->Pos(),
                                Prm.MaxShootingForce))
   {
-    player->Team()->RequestPass((FieldPlayer*)player);
+    player->Team()->RequestPass(player);
   }
 
 
@@ -327,7 +275,7 @@ void HuSupportAttacker::Execute(FieldPlayer* player)
     //if not threatened by another player request a pass
     if (!player->isThreatened())
     {
-      player->Team()->RequestPass((FieldPlayer*)player);
+      player->Team()->RequestPass(player);
     }
   }
 }
@@ -462,7 +410,7 @@ void HuWait::Execute(FieldPlayer* player)
      (!player->isControllingPlayer()) &&
        player->isAheadOfAttacker() )
   {
-    player->Team()->RequestPass((FieldPlayer*)player);
+    player->Team()->RequestPass(player);
 
     return;
   }
@@ -793,91 +741,10 @@ void HuReceiveBall::Exit(FieldPlayer* player)
 }
 
 
-//***********************************************************************************************HuDefensiveAttacker
-HuDefensiveAttacker* HuDefensiveAttacker::Instance()
-{
-	static HuDefensiveAttacker instance;
-
-	return &instance;
-}
-
-void HuDefensiveAttacker::Enter(FieldPlayer* player)
-{
 
 
-}
 
-void HuDefensiveAttacker::Execute(FieldPlayer* player)
-{
+ 
 
-
-}
-
-void HuDefensiveAttacker::Exit(FieldPlayer* player)
-{
-	//set supporting player to null so that the team knows it has to 
-	//determine a new one.
-	((HuFieldPlayer*)player)->Team()->SetDefensiveAttacker(NULL);
-
-	player->Steering()->ArriveOff();
-}
-
-//***********************************************************************************************HuGuarder
-HuGuarder* HuGuarder::Instance()
-{
-	static HuGuarder instance;
-
-	return &instance;
-}
-
-void HuGuarder::Enter(FieldPlayer* player)
-{
-
-
-}
-
-void HuGuarder::Execute(FieldPlayer* player)
-{
-
-
-}
-
-void HuGuarder::Exit(FieldPlayer* player)
-{
-	//set supporting player to null so that the team knows it has to 
-	//determine a new one.
-	((HuFieldPlayer*)player)->Team()->SetGuarder(NULL);
-
-	player->Steering()->ArriveOff();
-}
-
-//***********************************************************************************************HuDefender
-HuDefender* HuDefender::Instance()
-{
-	static HuDefender instance;
-
-	return &instance;
-}
-
-void HuDefender::Enter(FieldPlayer* player)
-{
-
-
-}
-
-void HuDefender::Execute(FieldPlayer* player)
-{
-
-
-}
-
-void HuDefender::Exit(FieldPlayer* player)
-{
-	//set supporting player to null so that the team knows it has to 
-	//determine a new one.
-	((HuFieldPlayer*)player)->Team()->SetDefender(NULL);
-
-	player->Steering()->ArriveOff();
-}
 
 
