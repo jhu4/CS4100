@@ -22,7 +22,8 @@ HuSoccerTeam::HuSoccerTeam(Goal*        home_goal,
                        team_color   color):
 	AbstSoccerTeam(home_goal, opponents_goal, pitch, color),
 	m_pDefensiveAttacker(NULL),
-	m_pGuarder(NULL)
+	m_pGuarder(NULL),
+	m_pDefender(NULL)
 
 {
   InitStateMachine ();
@@ -406,7 +407,7 @@ PlayerBase* HuSoccerTeam::DetermineBestDefensiveAttacker()
 
 		//Find a defensive attacker who is not the closet to the ball
 		if ((plyr->Role() != PlayerBase::goal_keeper) && 
-			(plyr->GetFSM()->isInState(*HuWait::Instance())) && 
+			((plyr->GetFSM()->isInState(*HuWait::Instance())) || (plyr->GetFSM()->isInState(*HuReturnToHomeRegion::Instance()))) &&
 			!(plyr->GetFSM()->isInState(*HuChaseBall::Instance())))
 		{
 		
@@ -445,7 +446,7 @@ PlayerBase* HuSoccerTeam::DetermineBestDefender()
 
 		//Find a defensive attacker who is not the closet to the ball
 		if ((plyr->Role() != PlayerBase::goal_keeper) &&
-			(plyr->GetFSM()->isInState(*HuWait::Instance())) &&
+			((plyr->GetFSM()->isInState(*HuWait::Instance())) || (plyr->GetFSM()->isInState(*HuReturnToHomeRegion::Instance()))) &&
 			!(plyr->GetFSM()->isInState(*HuChaseBall::Instance())))
 		{
 

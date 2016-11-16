@@ -110,6 +110,7 @@ void HuDefending::Enter(AbstSoccerTeam* team)
 		  Msg_Defender,
 		  NULL);
   }
+  ((HuSoccerTeam*)team)->SetDefender(defender);
 
   //if a player is in either the Wait or ReturnToHomeRegion states, its
   //steering target must be updated to that of its new home region
@@ -131,8 +132,17 @@ void HuDefending::Execute(AbstSoccerTeam* team)
 
 
 void HuDefending::Exit(AbstSoccerTeam* team){
-	
-	((HuSoccerTeam*)team)->SetDefender(NULL);
+	PlayerBase* defender = ((HuSoccerTeam*)team)->Defender();
+	if (defender!=NULL) {
+		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+			defender->ID(),
+			defender->ID(),
+			Msg_GoHome,
+			NULL);
+		//there is no supporting player for defensive attacker
+		((HuSoccerTeam*)team)->SetDefender(NULL);
+	}
+	return;
 }
 
 //************************************************************************ KICKOFF

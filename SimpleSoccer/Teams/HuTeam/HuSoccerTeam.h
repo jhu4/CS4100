@@ -35,6 +35,7 @@ public:
 	void SetGuarder(PlayerBase* player) { m_pGuarder = player; }
 	void SetDefensiveAttacker(PlayerBase* player) { m_pDefensiveAttacker = player; }
 	void SetDefender(PlayerBase* player) { m_pDefender = player; }
+
 	PlayerBase* Guarder() { return m_pGuarder; }
 	PlayerBase* DefensiveAttacker() { return m_pDefensiveAttacker; }
 	PlayerBase* Defender(){ return m_pDefender; }

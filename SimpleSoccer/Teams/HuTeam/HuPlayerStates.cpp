@@ -817,7 +817,8 @@ void HuDefensiveAttacker::Enter(FieldPlayer* player) {
 }
 
 void HuDefensiveAttacker::Execute(FieldPlayer* player) {
-	if (player->isClosestTeamMemberToBall()) {
+	if (player->isClosestTeamMemberToBall() && (player->Team()->Receiver() == NULL) &&
+		(!player->Pitch()->GoalKeeperHasBall())) {
 		player->GetFSM()->ChangeState(HuChaseBall::Instance());
 		
 		//let the new defensive attacker to do its job!
@@ -863,7 +864,8 @@ void HuDefender::Enter(FieldPlayer* player) {
 }
 
 void HuDefender::Execute(FieldPlayer* player) {
-	if (player->isClosestTeamMemberToBall()) {
+	if (player->isClosestTeamMemberToBall() && (player->Team()->Receiver() == NULL) &&
+		(!player->Pitch()->GoalKeeperHasBall())) {
 		player->GetFSM()->ChangeState(HuChaseBall::Instance());
 
 		//let the new defender to do its job!
