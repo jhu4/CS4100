@@ -32,17 +32,31 @@ public:
                                         double kickingForce)const;
 	//*
 	bool isBallInOurHalf();
+
+
+
+	//*getters and setters
+	PlayerBase* Guarder(){ return m_pGuader;}
+	PlayerBase* DefensiveAttacker(){ return m_pDefensiveAttacker; }
+	PlayerBase* Defender(){return m_pDefender; }
+
+	void SetGuarder(PlayerBase* player) { m_pGuader = player; }
+	void SetDefensiveAttacker(PlayerBase* player) { m_pDefensiveAttacker = player; }
+	void SetDefender(PlayerBase* player) { m_pDefender = player; }
+
+	//*The function to find guaders and defensive attackers
+	PlayerBase* DetermineBestGuarder();
+	PlayerBase* DetermineBestDefensiveAttacker();
+	PlayerBase* DetermineBestDefender();
+
 protected:
 	std::string Name()const{if (m_Color == blue) return "Blue Hu"; return "Red Hu";}
 
-	//*Add two more characters in the team
+	//*Add 3 more characters in the team
+	PlayerBase* m_pDefender;
 	PlayerBase* m_pGuader;
 	PlayerBase* m_pDefensiveAttacker;
 
-	//*The function to find guaders and defensive attackers
-	PlayerBase* DetermineBestGuader();
-	PlayerBase* DetermineDefensiveAttacker();
-	
 	void InitStateMachine();
 	void CreatePlayers();
 	void InitPlayers();

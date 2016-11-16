@@ -1,17 +1,18 @@
 #include "HuGoalKeeperStates.h"
+#include "HuSoccerMessages.h"
+
+#include "../../FieldPlayer.h"
+#include "../../PlayerBase.h"
 #include "Debug/DebugConsole.h"
 #include "../../SoccerPitch.h"
-#include "../../PlayerBase.h"
 #include "../../GoalKeeper.h"
 #include "../../SteeringBehaviors.h"
 #include "HuSoccerTeam.h"
 #include "../../Goal.h"
 #include "2D/geometry.h"
-#include "HuFieldPlayer.h"
 #include "../../ParamLoader.h"
 #include "Messaging/Telegram.h"
 #include "Messaging/MessageDispatcher.h"
-#include "../../SoccerMessages.h"
 
 
 //uncomment to send state info to debug window

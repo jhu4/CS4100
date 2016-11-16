@@ -1,8 +1,11 @@
 #include "HuPlayerStates.h"
 #include "HuSoccerTeam.h"
+#include "HuFieldPlayer.h"
+#include "../../FieldPlayer.h"
+#include "HuSoccerMessages.h"
+
 #include "Debug/DebugConsole.h"
 #include "../../SoccerPitch.h"
-#include "HuFieldPlayer.h"
 #include "../../SteeringBehaviors.h"
 #include "../../AbstSoccerTeam.h"
 #include "../../Goal.h"
@@ -11,7 +14,6 @@
 #include "../../ParamLoader.h"
 #include "Messaging/Telegram.h"
 #include "Messaging/MessageDispatcher.h"
-#include "../../SoccerMessages.h"
 
 #include "time/Regulator.h"
 
@@ -30,7 +32,7 @@ HuGlobalPlayerState* HuGlobalPlayerState::Instance()
 }
 
 
-void HuGlobalPlayerState::Execute(HuFieldPlayer* player)                                     
+void HuGlobalPlayerState::Execute(FieldPlayer* player)                                     
 {
   //if a player is in possession and close to the ball reduce his max speed
   if((player->BallWithinReceivingRange()) && (player->isControllingPlayer()))
@@ -46,7 +48,7 @@ void HuGlobalPlayerState::Execute(HuFieldPlayer* player)
 }
 
 
-bool HuGlobalPlayerState::OnMessage(HuFieldPlayer* player, const Telegram& telegram)
+bool HuGlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 {
   switch(telegram.Msg)
   {
@@ -82,6 +84,56 @@ bool HuGlobalPlayerState::OnMessage(HuFieldPlayer* player, const Telegram& teleg
 
     break;
 
+	//*
+  case Msg_DefensiveAttacker:
+  {
+	  //if already supporting just return
+	  if (player->GetFSM()->isInState(*HuDefensiveAttacker::Instance()))
+	  {
+		  return true;
+	  }
+
+	  //change the state
+	  player->GetFSM()->ChangeState(HuDefensiveAttacker::Instance());
+
+	  return true;
+  }
+
+  break;
+
+  case Msg_Guarder:
+  {
+	  //if already supporting just return
+	  if (player->GetFSM()->isInState(*HuGuarder::Instance()))
+	  {
+		  return true;
+	  }
+		
+	 // if (player->Team()->Color() == AbstSoccerTeam::blue) {
+	//	  player->Steering()->SetTarget()
+	 // }
+	  //change the state
+	  player->GetFSM()->ChangeState(HuGuarder::Instance());
+
+	  return true;
+  }
+
+  case Msg_Defender:
+  {
+	  //if already supporting just return
+	  if (player->GetFSM()->isInState(*HuDefender::Instance()))
+	  {
+		  return true;
+	  }
+
+
+	  //change the state
+	  player->GetFSM()->ChangeState(HuDefender::Instance());
+
+	  return true;
+  }
+
+  break;
  case Msg_Wait:
     {
       //change the state
@@ -107,7 +159,7 @@ bool HuGlobalPlayerState::OnMessage(HuFieldPlayer* player, const Telegram& teleg
     {  
       
       //get the position of the player requesting the pass 
-      HuFieldPlayer* receiver = static_cast<HuFieldPlayer*>(telegram.ExtraInfo);
+      FieldPlayer* receiver = static_cast<FieldPlayer*>(telegram.ExtraInfo);
 
       #ifdef HUPLAYER_STATE_INFO_ON
       debug_con << "Player " << player->ID() << " received request from " <<
@@ -173,7 +225,7 @@ HuChaseBall* HuChaseBall::Instance()
 }
 
 
-void HuChaseBall::Enter(HuFieldPlayer* player)
+void HuChaseBall::Enter(FieldPlayer* player)
 {
   player->Steering()->SeekOn();
 
@@ -182,7 +234,7 @@ void HuChaseBall::Enter(HuFieldPlayer* player)
   #endif
 }
 
-void HuChaseBall::Execute(HuFieldPlayer* player)                                     
+void HuChaseBall::Execute(FieldPlayer* player)                                     
 {
   //if the ball is within kicking range the player changes state to HuKickBall.
   if (player->BallWithinKickingRange())
@@ -207,7 +259,7 @@ void HuChaseBall::Execute(HuFieldPlayer* player)
 }
 
 
-void HuChaseBall::Exit(HuFieldPlayer* player)
+void HuChaseBall::Exit(FieldPlayer* player)
 {
   player->Steering()->SeekOff();
 }
@@ -224,7 +276,7 @@ HuSupportAttacker* HuSupportAttacker::Instance()
 }
 
 
-void HuSupportAttacker::Enter(HuFieldPlayer* player)
+void HuSupportAttacker::Enter(FieldPlayer* player)
 {
   player->Steering()->ArriveOn();
 
@@ -235,7 +287,7 @@ void HuSupportAttacker::Enter(HuFieldPlayer* player)
   #endif
 }
 
-void HuSupportAttacker::Execute(HuFieldPlayer* player)                                     
+void HuSupportAttacker::Execute(FieldPlayer* player)                                     
 {
   //if his team loses control go back home
   if (!player->Team()->InControl())
@@ -281,7 +333,7 @@ void HuSupportAttacker::Execute(HuFieldPlayer* player)
 }
 
 
-void HuSupportAttacker::Exit(HuFieldPlayer* player)
+void HuSupportAttacker::Exit(FieldPlayer* player)
 {
   //set supporting player to null so that the team knows it has to 
   //determine a new one.
@@ -303,7 +355,7 @@ HuReturnToHomeRegion* HuReturnToHomeRegion::Instance()
 }
 
 
-void HuReturnToHomeRegion::Enter(HuFieldPlayer* player)
+void HuReturnToHomeRegion::Enter(FieldPlayer* player)
 {
   player->Steering()->ArriveOn();
 
@@ -317,7 +369,7 @@ void HuReturnToHomeRegion::Enter(HuFieldPlayer* player)
   #endif
 }
 
-void HuReturnToHomeRegion::Execute(HuFieldPlayer* player)
+void HuReturnToHomeRegion::Execute(FieldPlayer* player)
 {
   if (player->Pitch()->GameOn())
   {
@@ -351,7 +403,7 @@ void HuReturnToHomeRegion::Execute(HuFieldPlayer* player)
   }
 }
 
-void HuReturnToHomeRegion::Exit(HuFieldPlayer* player)
+void HuReturnToHomeRegion::Exit(FieldPlayer* player)
 {
   player->Steering()->ArriveOff();
 }
@@ -369,7 +421,7 @@ HuWait* HuWait::Instance()
 }
 
 
-void HuWait::Enter(HuFieldPlayer* player)
+void HuWait::Enter(FieldPlayer* player)
 {
   #ifdef HUPLAYER_STATE_INFO_ON
   debug_con << "Player " << player->ID() << " enters mywait state" << "";
@@ -384,7 +436,7 @@ void HuWait::Enter(HuFieldPlayer* player)
   }
 }
 
-void HuWait::Execute(HuFieldPlayer* player)
+void HuWait::Execute(FieldPlayer* player)
 {    
   //if the player has been jostled out of position, get back in position  
   if (!player->AtTarget())
@@ -431,7 +483,7 @@ void HuWait::Execute(HuFieldPlayer* player)
   } 
 }
 
-void HuWait::Exit(HuFieldPlayer* player){}
+void HuWait::Exit(FieldPlayer* player){}
 
 
 
@@ -446,7 +498,7 @@ HuKickBall* HuKickBall::Instance()
 }
 
 
-void HuKickBall::Enter(HuFieldPlayer* player)
+void HuKickBall::Enter(FieldPlayer* player)
 {
   //let the team know this player is controlling
    player->Team()->SetControllingPlayer(player);
@@ -463,7 +515,7 @@ void HuKickBall::Enter(HuFieldPlayer* player)
   #endif
 }
 
-void HuKickBall::Execute(HuFieldPlayer* player)
+void HuKickBall::Execute(FieldPlayer* player)
 { 
   //calculate the dot product of the vector pointing to the ball
   //and the player's heading
@@ -592,7 +644,7 @@ HuDribble* HuDribble::Instance()
 }
 
 
-void HuDribble::Enter(HuFieldPlayer* player)
+void HuDribble::Enter(FieldPlayer* player)
 {
   //let the team know this player is controlling
   player->Team()->SetControllingPlayer(player);
@@ -602,7 +654,7 @@ void HuDribble::Enter(HuFieldPlayer* player)
   #endif
 }
 
-void HuDribble::Execute(HuFieldPlayer* player)
+void HuDribble::Execute(FieldPlayer* player)
 {
   double dot = player->Team()->HomeGoal()->Facing().Dot(player->Heading());
 
@@ -667,7 +719,7 @@ HuReceiveBall* HuReceiveBall::Instance()
 }
 
 
-void HuReceiveBall::Enter(HuFieldPlayer* player)
+void HuReceiveBall::Enter(FieldPlayer* player)
 {
   //let the team know this player is receiving the ball
   player->Team()->SetReceiver(player);
@@ -705,7 +757,7 @@ void HuReceiveBall::Enter(HuFieldPlayer* player)
   }
 }
 
-void HuReceiveBall::Execute(HuFieldPlayer* player)
+void HuReceiveBall::Execute(FieldPlayer* player)
 {
   //if the ball comes close enough to the player or if his team lose control
   //he should change state to chase the ball
@@ -732,7 +784,7 @@ void HuReceiveBall::Execute(HuFieldPlayer* player)
   } 
 }
 
-void HuReceiveBall::Exit(HuFieldPlayer* player)
+void HuReceiveBall::Exit(FieldPlayer* player)
 {
   player->Steering()->ArriveOff();
   player->Steering()->PursuitOff();
@@ -741,9 +793,91 @@ void HuReceiveBall::Exit(HuFieldPlayer* player)
 }
 
 
+//***********************************************************************************************HuDefensiveAttacker
+HuDefensiveAttacker* HuDefensiveAttacker::Instance()
+{
+	static HuDefensiveAttacker instance;
+
+	return &instance;
+}
+
+void HuDefensiveAttacker::Enter(FieldPlayer* player)
+{
 
 
- 
+}
 
+void HuDefensiveAttacker::Execute(FieldPlayer* player)
+{
+
+
+}
+
+void HuDefensiveAttacker::Exit(FieldPlayer* player)
+{
+	//set supporting player to null so that the team knows it has to 
+	//determine a new one.
+	((HuFieldPlayer*)player)->Team()->SetDefensiveAttacker(NULL);
+
+	player->Steering()->ArriveOff();
+}
+
+//***********************************************************************************************HuGuarder
+HuGuarder* HuGuarder::Instance()
+{
+	static HuGuarder instance;
+
+	return &instance;
+}
+
+void HuGuarder::Enter(FieldPlayer* player)
+{
+
+
+}
+
+void HuGuarder::Execute(FieldPlayer* player)
+{
+
+
+}
+
+void HuGuarder::Exit(FieldPlayer* player)
+{
+	//set supporting player to null so that the team knows it has to 
+	//determine a new one.
+	((HuFieldPlayer*)player)->Team()->SetGuarder(NULL);
+
+	player->Steering()->ArriveOff();
+}
+
+//***********************************************************************************************HuDefender
+HuDefender* HuDefender::Instance()
+{
+	static HuDefender instance;
+
+	return &instance;
+}
+
+void HuDefender::Enter(FieldPlayer* player)
+{
+
+
+}
+
+void HuDefender::Execute(FieldPlayer* player)
+{
+
+
+}
+
+void HuDefender::Exit(FieldPlayer* player)
+{
+	//set supporting player to null so that the team knows it has to 
+	//determine a new one.
+	((HuFieldPlayer*)player)->Team()->SetDefender(NULL);
+
+	player->Steering()->ArriveOff();
+}
 
 

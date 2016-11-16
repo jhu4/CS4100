@@ -1,9 +1,10 @@
 #include "HuTeamStates.h"
 #include"HuSoccerTeam.h"
+#include "HuSoccerMessages.h"
+
 #include "../../AbstSoccerTeam.h"
 #include "../../PlayerBase.h"
 #include "Messaging/MessageDispatcher.h"
-#include "../../SoccerMessages.h"
 #include "../../constants.h"
 #include "../../SoccerPitch.h"
 

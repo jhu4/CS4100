@@ -1,53 +1,20 @@
-#pragma warning (disable:4786)
-#ifndef HUHuFIELDPLAYER_H
-#define HUHuFIELDPLAYER_H
-//------------------------------------------------------------------------
-//
-//  Name:   HuFieldPlayer.h
-//
-//  Desc:   Derived from a PlayerBase, this class encapsulates a player
-//          capable of moving around a soccer pitch, kicking, dribbling,
-//          shooting etc
-//
-//  Author: Mat Buckland 2003 (fup@ai-junkie.com)
-//
-//------------------------------------------------------------------------
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <cassert>
+#ifndef HUFIELDPLAYER_H
+#define HUFIELDPLAYER_H
 
-//#include "HuFieldPlayerStates.h"
-#include "2D/Vector2D.h"
-#include "FSM/StateMachine.h"
-#include "../../PlayerBase.h"
-#include "FSM/StateMachine.h"
-#include "time/Regulator.h"
+#include "../../FieldPlayer.h"
+#include "HuSoccerTeam.h"
 
-class CSteeringBehavior;
-class AbstSoccerTeam;
-class SoccerPitch;
-class Goal;
-struct Telegram;
-
-
-class HuFieldPlayer : public PlayerBase
+class HuFieldPlayer : public FieldPlayer
 {
 private:
+	HuSoccerTeam* myteam;
 
-   //an instance of the state machine class
-  StateMachine<HuFieldPlayer>*  m_pStateMachine;
-  
-  //limits the number of kicks a player may take per second
-  Regulator*                  m_pKickLimiter;
-
-  
 public:
 
-  HuFieldPlayer(AbstSoccerTeam*    home_team,
+  HuFieldPlayer(HuSoccerTeam*    home_team,
              int        home_region,
-             State<HuFieldPlayer>* start_state,
-			 State<HuFieldPlayer>* global_state,
+             State<FieldPlayer>* start_state,
+			 State<FieldPlayer>* global_state,
              Vector2D  heading,
              Vector2D      velocity,
              double         mass,
@@ -59,16 +26,13 @@ public:
   
   ~HuFieldPlayer();
 
-  //call this to update the player's position and orientation
-  void        Update();   
+  HuSoccerTeam* Team() { return myteam;}
 
-  void        Render();
 
-  bool        HandleMessage(const Telegram& msg);
-
-  StateMachine<HuFieldPlayer>* GetFSM()const{return m_pStateMachine;}
-
-  bool        isReadyForNextKick()const{return m_pKickLimiter->isReady();}
+  //*Find the defensive
+  void		  FindDefensiveAttacker();
+  void		  FindDefender();
+  void		  FindGuarder();
 
          
 };

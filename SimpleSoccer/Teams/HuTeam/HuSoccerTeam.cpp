@@ -1,12 +1,13 @@
 #include "HuSoccerTeam.h"
 #include "HuTeamStates.h"
 #include "HuFieldPlayer.h"
+#include "HuGoalKeeperStates.h"
+
 #include "../../SoccerPitch.h"
 #include "../../Goal.h"
 #include "../../ParamLoader.h"
 #include "FSM/StateMachine.h"
 #include "../../Goalkeeper.h"
-#include "../BucklandTeam/GoalKeeperStates.h"
 #include "../../SteeringBehaviors.h"
 #include "HuPlayerStates.h"
 #include "Debug/DebugConsole.h"
@@ -50,11 +51,11 @@ void HuSoccerTeam::CreatePlayers()
 {
   if (Color() == blue)
   {
-    //goalkeeper
+    //Hugoalkeeper
     m_Players.push_back(new GoalKeeper(this,
                                1,
-                               TendGoal::Instance(),
-                               GlobalKeeperState::Instance(),
+                               HuTendGoal::Instance(),
+                               HuGlobalKeeperState::Instance(),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                Prm.PlayerMass,
@@ -128,11 +129,11 @@ void HuSoccerTeam::CreatePlayers()
   else
   {
 
-     //goalkeeper
+     //Hugoalkeeper
     m_Players.push_back(new GoalKeeper(this,
                                16,
-                               TendGoal::Instance(),
-                               GlobalKeeperState::Instance(),
+                               HuTendGoal::Instance(),
+                               HuGlobalKeeperState::Instance(),
                                Vector2D(0,-1),
                                Vector2D(0.0, 0.0),
                                Prm.PlayerMass,
@@ -325,7 +326,7 @@ void HuSoccerTeam::UpdateTargetsOfWaitingPlayers()const
     if ( (*it)->Role() != PlayerBase::goal_keeper )
     {
       //cast to a field player
-      HuFieldPlayer* plyr = static_cast<HuFieldPlayer*>(*it);
+      FieldPlayer* plyr = static_cast<FieldPlayer*>(*it);
       
       if ( plyr->GetFSM()->isInState(*HuWait::Instance()) ||
            plyr->GetFSM()->isInState(*HuReturnToHomeRegion::Instance()) )
@@ -355,23 +356,102 @@ bool HuSoccerTeam::isBallInOurHalf() {
 	}
 }
 
-PlayerBase* HuSoccerTeam::DetermineBestGuader() {
+PlayerBase* HuSoccerTeam::DetermineBestGuarder() {
+	debug_con << "HuSoccerTeam::DetermineBestGuarder()" << "";
+
+	double ClosestSoFar = MaxFloat;
+
 	PlayerBase* BestPlayer = NULL;
+
 	std::vector<PlayerBase*>::iterator it = m_Players.begin();
 
 	for (it; it != m_Players.end(); ++it)
 	{
-		//only attackers utilize the BestSupportingSpot
-		if (((*it)->Role() == PlayerBase::attacker) && ((*it) != m_pControllingPlayer))
+
+		//only defenders can be a guarder
+		if (((*it)->Role() == PlayerBase::defender) && ((*it) != m_pControllingPlayer))
 		{
 			
+			//calculate the dist. Use the squared value to avoid sqrt
+			double dist = ((*it))->DistToHomeGoal();
+
+			//if the distance is the closest so far and the player is not a
+			//goalkeeper and the player is not the one currently controlling
+			//the ball, keep a record of this player
+			if ((dist < ClosestSoFar))
+			{
+				ClosestSoFar = dist;
+
+				BestPlayer = (*it);
+			}
 		}
 	}
 
 	return BestPlayer;
 
 }
-PlayerBase* HuSoccerTeam::DetermineDefensiveAttacker() {
+PlayerBase* HuSoccerTeam::DetermineBestDefensiveAttacker() {
+	debug_con << "HuSoccerTeam::DetermineBestDefensiveAttacker()" << "";
+	double ClosestSoFar = MaxFloat;
+
 	PlayerBase* BestPlayer = NULL;
+
+	std::vector<PlayerBase*>::iterator it = m_Players.begin();
+
+	for (it; it != m_Players.end(); ++it)
+	{
+
+		//only defenders can be a defensive attacker
+		if (((*it)->Role() == PlayerBase::defender) && ((*it) != m_pControllingPlayer))
+		{
+			
+			//calculate the dist btw a defender and the opponent controlling player
+			double dist = Vec2DDistanceSq((*it)->Pos(), Opponents()->ControllingPlayer()->Pos());
+
+			//if the distance is the closest so far and the player is not a
+			//goalkeeper and the player is not the one currently controlling
+			//the ball, keep a record of this player
+			if ((dist < ClosestSoFar))
+			{
+				ClosestSoFar = dist;
+
+				BestPlayer = (*it);
+			}
+		}
+	}
+
+	return BestPlayer;
+}
+
+
+PlayerBase* HuSoccerTeam::DetermineBestDefender() {
+	debug_con << "HuSoccerTeam::DetermineBestDefender()" << "";
+	double ClosestSoFar = MaxFloat;
+
+	PlayerBase* BestPlayer = NULL;
+
+	std::vector<PlayerBase*>::iterator it = m_Players.begin();
+
+	for (it; it != m_Players.end(); ++it)
+	{
+
+		if (((*it)->Role() == PlayerBase::defender) && ((*it) != m_pControllingPlayer))
+		{
+
+			//calculate the dist btw a defender and the opponent Supporting Player
+			double dist = Vec2DDistanceSq((*it)->Pos(), Opponents()->SupportingPlayer()->Pos());
+
+			//if the distance is the closest so far and the player is not a
+			//goalkeeper and the player is not the one currently controlling
+			//the ball, keep a record of this player
+			if ((dist < ClosestSoFar))
+			{
+				ClosestSoFar = dist;
+
+				BestPlayer = (*it);
+			}
+		}
+	}
+
 	return BestPlayer;
 }

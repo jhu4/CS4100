@@ -1,4 +1,7 @@
 #include "HuFieldPlayer.h"
+#include "HuSoccerMessages.h"
+#include "HuSoccerTeam.h"
+
 #include "../../PlayerBase.h"
 #include "../../SteeringBehaviors.h"
 #include "2D/Transformations.h"
@@ -12,181 +15,180 @@
 #include "../../AbstSoccerTeam.h"
 #include "time/Regulator.h"
 #include "Debug/DebugConsole.h"
-
+#include "Messaging/MessageDispatcher.h"
 
 #include <limits>
 
 using std::vector;
 
-//------------------------------- dtor ---------------------------------------
-//----------------------------------------------------------------------------
-HuFieldPlayer::~HuFieldPlayer()
+//---------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------
+HuFieldPlayer::~HuFieldPlayer() {
+
+}
+
+HuFieldPlayer::HuFieldPlayer(HuSoccerTeam*    home_team,
+             int        home_region,
+             State<FieldPlayer>* start_state,
+			 State<FieldPlayer>* global_state,
+             Vector2D  heading,
+             Vector2D      velocity,
+             double         mass,
+             double         max_force,
+             double         max_speed,
+             double         max_turn_rate,
+             double         scale,
+             player_role    role):myteam(home_team),FieldPlayer(home_team
+             													,home_region
+             													,start_state
+             													,global_state
+             													,heading
+             													,velocity
+             													,mass
+             													,max_force,
+             													max_speed,
+             													max_turn_rate,
+             													scale,
+             													role)
 {
-  delete m_pKickLimiter;
-  delete m_pStateMachine;
+
 }
 
-//----------------------------- ctor -------------------------------------
-//------------------------------------------------------------------------
-HuFieldPlayer::HuFieldPlayer(AbstSoccerTeam* home_team,
-                      int   home_region,
-                      State<HuFieldPlayer>* start_state,
-					  State<HuFieldPlayer>* global_state,
-                      Vector2D  heading,
-                      Vector2D velocity,
-                      double    mass,
-                      double    max_force,
-                      double    max_speed,
-                      double    max_turn_rate,
-                      double    scale,
-                      player_role role): PlayerBase(home_team,
-                                                    home_region,
-                                                    heading,
-                                                    velocity,
-                                                    mass,
-                                                    max_force,
-                                                    max_speed,
-                                                    max_turn_rate,
-                                                    scale,
-                                                    role)                                    
-{
-  //set up the state machine
-  m_pStateMachine =  new StateMachine<HuFieldPlayer>(this);
+//------------------------------------------------------------------------------
+void HuFieldPlayer::FindDefensiveAttacker(){
+	//if there is no support we need to find a suitable player.
+	if (Team()->DefensiveAttacker() == NULL)
+	{
+		PlayerBase* BestDefensiveAttackerPly = Team()->DetermineBestDefensiveAttacker();
 
-  if (start_state)
-  {    
-    m_pStateMachine->SetCurrentState(start_state);
-    m_pStateMachine->SetPreviousState(start_state);
-    m_pStateMachine->SetGlobalState(global_state);
+		Team()->SetDefensiveAttacker(BestDefensiveAttackerPly);
 
-    m_pStateMachine->CurrentState()->Enter(this);
-  }    
+		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+			ID(),
+			Team()->DefensiveAttacker()->ID(),
+			Msg_DefensiveAttacker,
+			NULL);
+	}
 
-  m_pSteering->SeparationOn();
+	PlayerBase* BestDefensiveAttackerPly = Team()->DetermineBestDefensiveAttacker();
 
-  //set up the kick regulator
-  m_pKickLimiter = new Regulator(Prm.PlayerKickFrequency);
+	//if the best player changes, update
+	//the pointers and send messages to the relevant players to update their
+	//states
+	if (BestDefensiveAttackerPly && (BestDefensiveAttackerPly != Team()->DefensiveAttacker()))
+	{
+
+		if (Team()->DefensiveAttacker())
+		{
+			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+				ID(),
+				Team()->DefensiveAttacker()->ID(),
+				Msg_GoHome,
+				NULL);
+		}
+
+
+
+		Team()->SetGuarder(BestDefensiveAttackerPly);
+
+		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+			ID(),
+			Team()->DefensiveAttacker()->ID(),
+			Msg_DefensiveAttacker,
+			NULL);
+	}
+
+
+}
+void HuFieldPlayer::FindDefender(){
+	//if there is no support we need to find a suitable player.
+	if (Team()->Defender() == NULL)
+	{
+		PlayerBase* BestDefenderPly = Team()->DetermineBestDefender();
+
+		Team()->SetDefender(BestDefenderPly);
+
+		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+			ID(),
+			Team()->Defender()->ID(),
+			Msg_Defender,
+			NULL);
+	}
+
+	PlayerBase* BestDefenderPly = Team()->DetermineBestDefender();
+
+	//if the best player changes, update
+	//the pointers and send messages to the relevant players to update their
+	//states
+	if (BestDefenderPly && (BestDefenderPly != Team()->Defender()))
+	{
+
+		if (Team()->Defender())
+		{
+			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+				ID(),
+				Team()->Defender()->ID(),
+				Msg_GoHome,
+				NULL);
+		}
+
+
+
+		Team()->SetGuarder(BestDefenderPly);
+
+		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+			ID(),
+			Team()->Guarder()->ID(),
+			Msg_Defender,
+			NULL);
+	}
+
+
 }
 
-//------------------------------ Update ----------------------------------
-//
-//  
-//------------------------------------------------------------------------
-void HuFieldPlayer::Update()
-{ 
-  //run the logic for the current state
-  m_pStateMachine->Update();
+void HuFieldPlayer::FindGuarder(){
 
-  //calculate the combined steering force
-  m_pSteering->Calculate();
+      //if there is no support we need to find a suitable player.
+      if (Team()->Guarder() == NULL)
+      {
+            PlayerBase* BestGuarderPly = Team()->DetermineBestGuarder();
 
-  //if no steering force is produced decelerate the player by applying a
-  //braking force
-  if (m_pSteering->Force().isZero())
-  {
-    const double BrakingRate = 0.8; 
+			Team()->SetGuarder(BestGuarderPly);
 
-    m_vVelocity = m_vVelocity * BrakingRate;                                     
-  }
-  
-  //the steering force's side component is a force that rotates the 
-  //player about its axis. We must limit the rotation so that a player
-  //can only turn by PlayerMaxTurnRate rads per update.
-  double TurningForce =   m_pSteering->SideComponent();
+            Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+                  ID(),
+				  Team()->Guarder()->ID(),
+                  Msg_Guarder,
+                  NULL);
+      }
 
-  Clamp(TurningForce, -Prm.PlayerMaxTurnRate, Prm.PlayerMaxTurnRate);
+      PlayerBase* BestGuarderPly = Team()->DetermineBestGuarder();
 
-  //rotate the heading vector
-  Vec2DRotateAroundOrigin(m_vHeading, TurningForce);
+      //if the best player changes, update
+      //the pointers and send messages to the relevant players to update their
+      //states
+      if (BestGuarderPly && (BestGuarderPly != Team()->Guarder()))
+      {
 
-  //make sure the velocity vector points in the same direction as
-  //the heading vector
-  m_vVelocity = m_vHeading * m_vVelocity.Length();
-
-  //and recreate m_vSide
-  m_vSide = m_vHeading.Perp();
+            if (Team()->Guarder())
+            {
+                  Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+                        ID(),
+					    Team()->Guarder()->ID(),
+                        Msg_GoHome,
+                        NULL);
+            }
 
 
-  //now to calculate the acceleration due to the force exerted by
-  //the forward component of the steering force in the direction
-  //of the player's heading
-  Vector2D accel = m_vHeading * m_pSteering->ForwardComponent() / m_dMass;
 
-  m_vVelocity += accel;
+			Team()->SetGuarder(BestGuarderPly);
 
-  //make sure player does not exceed maximum velocity
-  m_vVelocity.Truncate(m_dMaxSpeed);
-
-  //update the position
-  m_vPosition += m_vVelocity;
+            Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+                  ID(),
+			      Team()->Guarder()->ID(),
+                  Msg_Guarder,
+                  NULL);
+      }
 
 
-  //enforce a non-penetration constraint if desired
-  if(Prm.bNonPenetrationConstraint)
-  {
-    EnforceNonPenetrationContraint(this, AutoList<PlayerBase>::GetAllMembers());
-  }
 }
-
-//-------------------- HandleMessage -------------------------------------
-//
-//  routes any messages appropriately
-//------------------------------------------------------------------------
-bool HuFieldPlayer::HandleMessage(const Telegram& msg)
-{
-  return m_pStateMachine->HandleMessage(msg);
-}
-
-//--------------------------- Render -------------------------------------
-//
-//------------------------------------------------------------------------
-void HuFieldPlayer::Render()                                         
-{
-  gdi->TransparentText();
-  gdi->TextColor(Cgdi::grey);
-
-  //set appropriate team color
-  if (Team()->Color() == AbstSoccerTeam::blue){gdi->BluePen();}
-  else{gdi->RedPen();}
-
-  
-
-  //render the player's body
-  m_vecPlayerVBTrans = WorldTransform(m_vecPlayerVB,
-                                         Pos(),
-                                         Heading(),
-                                         Side(),
-                                         Scale());
-  gdi->ClosedShape(m_vecPlayerVBTrans);  
-  
-  //and 'is 'ead
-  gdi->BrownBrush();
-  if (Prm.bHighlightIfThreatened && (Team()->ControllingPlayer() == this) && isThreatened()) gdi->YellowBrush();
-  gdi->Circle(Pos(), 6);
-
-    
-  //render the state
-  if (Prm.bStates)
-  {  
-    gdi->TextColor(0, 170, 0);
-    gdi->TextAtPos(m_vPosition.x, m_vPosition.y -20, std::string(m_pStateMachine->GetNameOfCurrentState()));
-  }
-
-  //show IDs
-  if (Prm.bIDs)
-  {
-    gdi->TextColor(0, 170, 0);
-    gdi->TextAtPos(Pos().x-20, Pos().y-20, ttos(ID()));
-  }
-
-
-  if (Prm.bViewTargets)
-  {
-    gdi->RedBrush();
-    gdi->Circle(Steering()->Target(), 3);
-    gdi->TextAtPos(Steering()->Target(), ttos(ID()));
-  }   
-}
-
-
-
