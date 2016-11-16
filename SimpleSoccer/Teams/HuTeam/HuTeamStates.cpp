@@ -101,6 +101,16 @@ void HuDefending::Enter(AbstSoccerTeam* team)
     team->ChangePlayerHomeRegions(RedRegions);
   }
   
+  //**
+  PlayerBase* defender = ((HuSoccerTeam*)team)->DetermineBestDefender();
+  if (defender != NULL) {
+	  Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+		  defender->ID(),
+		  defender->ID(),
+		  Msg_Defender,
+		  NULL);
+  }
+
   //if a player is in either the Wait or ReturnToHomeRegion states, its
   //steering target must be updated to that of its new home region
   team->UpdateTargetsOfWaitingPlayers();
@@ -120,7 +130,10 @@ void HuDefending::Execute(AbstSoccerTeam* team)
 }
 
 
-void HuDefending::Exit(AbstSoccerTeam* team){}
+void HuDefending::Exit(AbstSoccerTeam* team){
+	
+	((HuSoccerTeam*)team)->SetDefender(NULL);
+}
 
 //************************************************************************ KICKOFF
 HuPrepareForKickOff* HuPrepareForKickOff::Instance()
@@ -194,7 +207,7 @@ void HuDefensiveAttack::Enter(AbstSoccerTeam* team)
 	}
 
 	//**
-	PlayerBase* defensiveattacker = ((HuSoccerTeam*)team)->DefensiveAttacker();
+	PlayerBase* defensiveattacker = ((HuSoccerTeam*)team)->DetermineBestDefensiveAttacker();
 	if (defensiveattacker != NULL) {
 		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 			defensiveattacker->ID(),
@@ -202,7 +215,7 @@ void HuDefensiveAttack::Enter(AbstSoccerTeam* team)
 			Msg_DefensiveAttacker,
 			NULL);
 	}
-
+	((HuSoccerTeam*)team)->SetDefensiveAttacker(defensiveattacker);
 
 	//if a player is in either the Wait or ReturnToHomeRegion states, its
 	//steering target must be updated to that of its new home region
@@ -211,35 +224,29 @@ void HuDefensiveAttack::Enter(AbstSoccerTeam* team)
 
 void HuDefensiveAttack::Execute(AbstSoccerTeam* team)
 {	
-	//PlayerBase* defensiveattacker = ((HuSoccerTeam*)team)->DefensiveAttacker();
-
 	if (team->InControl()) {
 		team->GetFSM()->ChangeState(HuAttacking::Instance()); 
-	/*	Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			defensiveattacker->ID(),
-			defensiveattacker->ID(),
-			Msg,
-			NULL);*/
 		return;
 	}
 	else if (!team->InControl() && ((HuSoccerTeam*)team)->isBallInOurHalf()) {
 		team->GetFSM()->ChangeState(HuDefending::Instance()); 
-	/*	Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			defensiveattacker->ID(),
-			defensiveattacker->ID(),
-			Msg_GoHome,
-			NULL); */
 		return;
 	}
-
-	//calculate the best position for any supporting attacker to move to
-	//team->DetermineBestSupportingPosition();
 
 }
 
 void HuDefensiveAttack::Exit(AbstSoccerTeam* team)
-{
-	//there is no supporting player for defense
-	((HuSoccerTeam*)team)->SetDefensiveAttacker(NULL);
+{	
+	PlayerBase* defensiveattacker = ((HuSoccerTeam*)team)->DefensiveAttacker();
+	if (defensiveattacker!=NULL) {
+		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+			defensiveattacker->ID(),
+			defensiveattacker->ID(),
+			Msg_GoHome,
+			NULL);
+		//there is no supporting player for defensive attacker
+		((HuSoccerTeam*)team)->SetDefensiveAttacker(NULL);
+	}
+	
 	return;
 }

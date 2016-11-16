@@ -34,9 +34,14 @@ public:
 	bool isBallInOurHalf();
 	void SetGuarder(PlayerBase* player) { m_pGuarder = player; }
 	void SetDefensiveAttacker(PlayerBase* player) { m_pDefensiveAttacker = player; }
+	void SetDefender(PlayerBase* player) { m_pDefender = player; }
+	PlayerBase* Guarder() { return m_pGuarder; }
+	PlayerBase* DefensiveAttacker() { return m_pDefensiveAttacker; }
+	PlayerBase* Defender(){ return m_pDefender; }
 
-	PlayerBase* Guarder();
-	PlayerBase* DefensiveAttacker();
+	PlayerBase* DetermineBestDefensiveAttacker();
+	PlayerBase* DetermineBestGuarder();
+	PlayerBase* DetermineBestDefender();
 
 protected:
 	std::string Name()const{if (m_Color == blue) return "Blue Hu"; return "Red Hu";}
@@ -50,13 +55,10 @@ protected:
 	//pointers to 'key' players
 	PlayerBase*               m_pDefensiveAttacker;
 	PlayerBase*               m_pGuarder;
-
+	PlayerBase*				  m_pDefender;
 	//*
     void UpdateTargetsOfWaitingPlayers()const;
 	PlayerBase* DetermineBestSupportingAttacker();
-	PlayerBase* DetermineBestDefensiveAttacker();
-	PlayerBase* DetermineBestGuarder();
-
 };
 
 #endif

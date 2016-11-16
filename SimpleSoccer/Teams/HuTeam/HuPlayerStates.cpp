@@ -125,6 +125,25 @@ bool HuGlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegra
 
   break;
 
+  case Msg_Defender:
+  {
+#ifdef HUSTRATEGYIC_STATE_INFO_ON
+	  debug_con << "Player " << player->ID() << " received Msg " << " Defender" << "";
+#endif
+	  //if already supporting just return
+	  if (player->GetFSM()->isInState(*HuDefender::Instance()))
+	  {
+		  return true;
+	  }
+
+	  //change the state
+	  player->GetFSM()->ChangeState(HuDefender::Instance());
+
+	  return true;
+  }
+
+  break;
+
  case Msg_Wait:
     {
       //change the state
@@ -802,7 +821,7 @@ void HuDefensiveAttacker::Execute(FieldPlayer* player) {
 		player->GetFSM()->ChangeState(HuChaseBall::Instance());
 		
 		//let the new defensive attacker to do its job!
-		PlayerBase* newDefensivaAttacker = ((HuSoccerTeam*)player->Team())->DefensiveAttacker();
+		PlayerBase* newDefensivaAttacker = ((HuSoccerTeam*)player->Team())->DetermineBestDefensiveAttacker();
 		if (newDefensivaAttacker != NULL) {
 			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 				newDefensivaAttacker->ID(),
@@ -810,6 +829,7 @@ void HuDefensiveAttacker::Execute(FieldPlayer* player) {
 				Msg_DefensiveAttacker,
 				NULL);
 		}
+		((HuSoccerTeam*)player->Team())->SetDefensiveAttacker(newDefensivaAttacker);
 		return;
 	}
 
@@ -825,6 +845,57 @@ void HuDefensiveAttacker::Exit(FieldPlayer* player) {
 	player->Steering()->InterposeOff();
 	((HuSoccerTeam*)player->Team())->SetDefensiveAttacker(NULL);
 }
+
+
+
+//***********************************************************************************************
+HuDefender* HuDefender::Instance()
+{
+	static HuDefender instance;
+
+	return &instance;
+}
+
+void HuDefender::Enter(FieldPlayer* player) {
+	player->Steering()->InterposeOn(HU_INTERPOSE_DIST);
+	
+	
+}
+
+void HuDefender::Execute(FieldPlayer* player) {
+	if (player->isClosestTeamMemberToBall()) {
+		player->GetFSM()->ChangeState(HuChaseBall::Instance());
+
+		//let the new defender to do its job!
+		PlayerBase* newDefender = ((HuSoccerTeam*)player->Team())->DetermineBestDefender();
+		if (newDefender != NULL) {
+			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+				newDefender->ID(),
+				newDefender->ID(),
+				Msg_Defender,
+				NULL);
+		}
+
+		((HuSoccerTeam*)player->Team())->SetDefender(newDefender);
+		return;
+	}
+
+	if (player->Team()->Opponents()->SupportingPlayer() != NULL) {
+		player->Steering()->SetTarget(player->Team()->Opponents()->SupportingPlayer()->Pos());
+	}
+	else {
+		player->Steering()->SetTarget(player->Team()->Opponents()->PlayerClosestToBall()->Pos());
+	}
+}
+
+void HuDefender::Exit(FieldPlayer* player) {
+	player->Steering()->InterposeOff();
+	((HuSoccerTeam*)player->Team())->SetDefender(NULL);
+}
+
+
+
+
 
 
 //***********************************************************************************************
