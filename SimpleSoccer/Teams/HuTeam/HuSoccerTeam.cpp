@@ -402,10 +402,14 @@ PlayerBase* HuSoccerTeam::DetermineBestDefensiveAttacker()
 
 	for (it; it != m_Players.end(); ++it)
 	{
+		FieldPlayer* plyr = static_cast<FieldPlayer*>(*it);
 
 		//Find a defensive attacker who is not the closet to the ball
-		if (((*it)->Role() == PlayerBase::defender) && (!(*it)->isClosestTeamMemberToBall()))
+		if ((plyr->Role() != PlayerBase::goal_keeper) && 
+			(plyr->GetFSM()->isInState(*HuWait::Instance())) && 
+			!(plyr->GetFSM()->isInState(*HuChaseBall::Instance())))
 		{
+		
 			if(Opponents()->InControl()){
 				dist = Vec2DDistanceSq((*it)->Pos(), Opponents()->PlayerClosestToBall()->Pos());
 			}
@@ -473,5 +477,7 @@ PlayerBase* HuSoccerTeam::DefensiveAttacker() {
 		return m_pDefensiveAttacker;
 	}
 
-	return DetermineBestDefensiveAttacker();
+	PlayerBase* defensiveattacker=DetermineBestDefensiveAttacker();
+	SetDefensiveAttacker(defensiveattacker);
+	return defensiveattacker;
 }

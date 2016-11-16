@@ -21,7 +21,7 @@
 //uncomment below to send state info to the debug window
 //#define HUPLAYER_STATE_INFO_ON
 #define HUSTRATEGYIC_STATE_INFO_ON
-#define HU_INTERPOSE_DIST 50
+#define HU_INTERPOSE_DIST 100
 //************************************************************************ Global state
 
 HuGlobalPlayerState* HuGlobalPlayerState::Instance()
@@ -798,8 +798,18 @@ void HuDefensiveAttacker::Enter(FieldPlayer* player) {
 }
 
 void HuDefensiveAttacker::Execute(FieldPlayer* player) {
-	if (player->isClosestPlayerOnPitchToBall()) {
+	if (player->isClosestTeamMemberToBall()) {
 		player->GetFSM()->ChangeState(HuChaseBall::Instance());
+		
+		//let the new defensive attacker to do its job!
+		PlayerBase* newDefensivaAttacker = ((HuSoccerTeam*)player->Team())->DefensiveAttacker();
+		if (newDefensivaAttacker != NULL) {
+			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+				newDefensivaAttacker->ID(),
+				newDefensivaAttacker->ID(),
+				Msg_DefensiveAttacker,
+				NULL);
+		}
 		return;
 	}
 

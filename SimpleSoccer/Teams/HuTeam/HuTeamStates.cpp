@@ -211,24 +211,24 @@ void HuDefensiveAttack::Enter(AbstSoccerTeam* team)
 
 void HuDefensiveAttack::Execute(AbstSoccerTeam* team)
 {	
-	PlayerBase* defensiveattacker = ((HuSoccerTeam*)team)->DefensiveAttacker();
+	//PlayerBase* defensiveattacker = ((HuSoccerTeam*)team)->DefensiveAttacker();
 
 	if (team->InControl()) {
 		team->GetFSM()->ChangeState(HuAttacking::Instance()); 
-		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+	/*	Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 			defensiveattacker->ID(),
 			defensiveattacker->ID(),
-			Msg_Wait,
-			NULL);
+			Msg,
+			NULL);*/
 		return;
 	}
 	else if (!team->InControl() && ((HuSoccerTeam*)team)->isBallInOurHalf()) {
 		team->GetFSM()->ChangeState(HuDefending::Instance()); 
-		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+	/*	Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 			defensiveattacker->ID(),
 			defensiveattacker->ID(),
-			Msg_Wait,
-			NULL);
+			Msg_GoHome,
+			NULL); */
 		return;
 	}
 
