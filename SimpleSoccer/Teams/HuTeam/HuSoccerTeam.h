@@ -30,8 +30,14 @@ public:
                                         Vector2D    dir,
                                         const PlayerBase* const opp,
                                         double kickingForce)const;
-
+	//*
 	bool isBallInOurHalf();
+	void SetGuarder(PlayerBase* player) { m_pGuarder = player; }
+	void SetDefensiveAttacker(PlayerBase* player) { m_pDefensiveAttacker = player; }
+
+	PlayerBase* Guarder();
+	PlayerBase* DefensiveAttacker();
+
 protected:
 	std::string Name()const{if (m_Color == blue) return "Blue Hu"; return "Red Hu";}
 
@@ -40,8 +46,17 @@ protected:
 	void InitPlayers();
 	void prepareForKickoff();
 	
+
+	//pointers to 'key' players
+	PlayerBase*               m_pDefensiveAttacker;
+	PlayerBase*               m_pGuarder;
+
+	//*
     void UpdateTargetsOfWaitingPlayers()const;
 	PlayerBase* DetermineBestSupportingAttacker();
+	PlayerBase* DetermineBestDefensiveAttacker();
+	PlayerBase* DetermineBestGuarder();
+
 };
 
 #endif

@@ -21,7 +21,7 @@
 //uncomment below to send state info to the debug window
 //#define HUPLAYER_STATE_INFO_ON
 #define HUSTRATEGYIC_STATE_INFO_ON
-
+#define HU_INTERPOSE_DIST 50
 //************************************************************************ Global state
 
 HuGlobalPlayerState* HuGlobalPlayerState::Instance()
@@ -86,6 +86,44 @@ bool HuGlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegra
     }
 
     break;
+
+  case Msg_DefensiveAttacker:
+  {
+#ifdef HUSTRATEGYIC_STATE_INFO_ON
+	  debug_con << "Player " << player->ID() << " received Msg " << " DefensiveAttacker" << "";
+#endif
+	  //if already supporting just return
+	  if (player->GetFSM()->isInState(*HuDefensiveAttacker::Instance()))
+	  {
+		  return true;
+	  }
+
+	  //change the state
+	  player->GetFSM()->ChangeState(HuDefensiveAttacker::Instance());
+
+	  return true;
+  }
+
+  break;
+
+  case Msg_Guarder:
+  {
+#ifdef HUSTRATEGYIC_STATE_INFO_ON
+	  debug_con << "Player " << player->ID() << " received Msg " << " Guarder" << "";
+#endif
+	  //if already supporting just return
+	  if (player->GetFSM()->isInState(*HuGuarder::Instance()))
+	  {
+		  return true;
+	  }
+
+	  //change the state
+	  player->GetFSM()->ChangeState(HuGuarder::Instance());
+
+	  return true;
+  }
+
+  break;
 
  case Msg_Wait:
     {
@@ -745,11 +783,59 @@ void HuReceiveBall::Exit(FieldPlayer* player)
   player->Team()->SetReceiver(NULL);
 }
 
+//***********************************************************************************************
+
+HuDefensiveAttacker* HuDefensiveAttacker::Instance()
+{
+	static HuDefensiveAttacker instance;
+
+	return &instance;
+}
+
+void HuDefensiveAttacker::Enter(FieldPlayer* player) {
+	player->Steering()->InterposeOn(HU_INTERPOSE_DIST);
+	player->Steering()->SetTarget(player->Team()->Opponents()->PlayerClosestToBall()->Pos());
+}
+
+void HuDefensiveAttacker::Execute(FieldPlayer* player) {
+	if (player->isClosestPlayerOnPitchToBall()) {
+		player->GetFSM()->ChangeState(HuChaseBall::Instance());
+		return;
+	}
+
+	if (player->Team()->Opponents()->SupportingPlayer() != NULL) {
+		player->Steering()->SetTarget(player->Team()->Opponents()->SupportingPlayer()->Pos());
+	}
+	else {
+		player->Steering()->SetTarget(player->Team()->Opponents()->PlayerClosestToBall()->Pos());
+	}
+}
+
+void HuDefensiveAttacker::Exit(FieldPlayer* player) {
+	player->Steering()->InterposeOff();
+	((HuSoccerTeam*)player->Team())->SetDefensiveAttacker(NULL);
+}
 
 
+//***********************************************************************************************
+HuGuarder* HuGuarder::Instance()
+{
+	static HuGuarder instance;
 
+	return &instance;
+}
 
- 
+void HuGuarder::Enter(FieldPlayer* player) {
+	player->Steering()->InterposeOn(HU_INTERPOSE_DIST);
+}
+
+void HuGuarder::Execute(FieldPlayer* player) {
+
+}
+void HuGuarder::Exit(FieldPlayer* player) {
+	player->Steering()->InterposeOff();
+}
+
 
 
 

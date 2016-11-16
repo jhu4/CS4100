@@ -197,7 +197,46 @@ public:
 };
 
 
+//*****------------------------------------------------------------------------
+class HuDefensiveAttacker : public State<FieldPlayer>
+{
+private:
 
+	HuDefensiveAttacker() {}
 
-  
+public:
+
+	//this is a singleton
+	static HuDefensiveAttacker* Instance();
+
+	void Enter(FieldPlayer* player);
+
+	void Execute(FieldPlayer* player);
+
+	void Exit(FieldPlayer* player);
+
+	bool OnMessage(FieldPlayer*, const Telegram&) { return false; }
+};
+
+ 
+//*****------------------------------------------------------------------------
+class HuGuarder : public State<FieldPlayer>
+{
+private:
+
+	HuGuarder() {}
+
+public:
+
+	//this is a singleton
+	static HuGuarder* Instance();
+
+	void Enter(FieldPlayer* player);
+
+	void Execute(FieldPlayer* player);
+
+	void Exit(FieldPlayer* player);
+
+	bool OnMessage(FieldPlayer*, const Telegram&) { return false; }
+};
 #endif

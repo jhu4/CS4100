@@ -20,7 +20,9 @@ HuSoccerTeam::HuSoccerTeam(Goal*        home_goal,
                        Goal*        opponents_goal,
                        SoccerPitch* pitch,
                        team_color   color):
-	AbstSoccerTeam(home_goal, opponents_goal, pitch, color)
+	AbstSoccerTeam(home_goal, opponents_goal, pitch, color),
+	m_pDefensiveAttacker(NULL),
+	m_pGuarder(NULL)
 
 {
   InitStateMachine ();
@@ -356,7 +358,7 @@ bool HuSoccerTeam::isBallInOurHalf() {
 	}
 }
 
-//*
+//*overhead
 PlayerBase* HuSoccerTeam::DetermineBestSupportingAttacker()
 {
 	double ClosestSoFar = MaxFloat;
@@ -386,4 +388,90 @@ PlayerBase* HuSoccerTeam::DetermineBestSupportingAttacker()
 	}
 
 	return BestPlayer;
+}
+
+//*------------- DetermineBestDefensiveAttacker ------------------------
+PlayerBase* HuSoccerTeam::DetermineBestDefensiveAttacker()
+{
+	double ClosestSoFar = MaxFloat;
+	double dist = MaxFloat;
+
+	PlayerBase* BestPlayer = NULL;
+ 
+	std::vector<PlayerBase*>::iterator it = m_Players.begin();
+
+	for (it; it != m_Players.end(); ++it)
+	{
+
+		//Find a defensive attacker who is not the closet to the ball
+		if (((*it)->Role() == PlayerBase::defender) && (!(*it)->isClosestTeamMemberToBall()))
+		{
+			if(Opponents()->InControl()){
+				dist = Vec2DDistanceSq((*it)->Pos(), Opponents()->PlayerClosestToBall()->Pos());
+			}
+
+			//if the distance is the closest so far and the player is not a
+			//goalkeeper and the player is not the one currently controlling
+			//the ball, keep a record of this player
+			if ((dist <= ClosestSoFar))
+			{
+				ClosestSoFar = dist;
+
+				BestPlayer = (*it);
+			}
+		}
+	}
+
+	return BestPlayer;
+}
+
+//*------------- DetermineBestGuarder ------------------------
+PlayerBase* HuSoccerTeam::DetermineBestGuarder() {
+	double ClosestSoFar = MaxFloat;
+	double dist = MaxFloat;
+
+	PlayerBase* BestPlayer = NULL;
+
+	std::vector<PlayerBase*>::iterator it = m_Players.begin();
+
+	for (it; it != m_Players.end(); ++it)
+	{
+
+		//Find a defensive attacker who is not the closet to the ball
+		if (((*it)->Role() != PlayerBase::goal_keeper) && (!(*it)->isClosestTeamMemberToBall()))
+		{
+			if (Opponents()->InControl()) {
+				dist = Vec2DDistanceSq((*it)->Pos(), Opponents()->SupportingPlayer()->Pos());
+			}
+
+			//if the distance is the closest so far and the player is not a
+			//goalkeeper and the player is not the one currently controlling
+			//the ball, keep a record of this player
+			if ((dist <= ClosestSoFar))
+			{
+				ClosestSoFar = dist;
+
+				BestPlayer = (*it);
+			}
+		}
+	}
+
+	return BestPlayer;
+}
+
+
+PlayerBase* HuSoccerTeam::Guarder() {
+	if (m_pGuarder != NULL) {
+		return m_pGuarder;
+	}
+
+	return DetermineBestGuarder();
+}
+
+PlayerBase* HuSoccerTeam::DefensiveAttacker() {
+	if (m_pDefensiveAttacker != NULL) {
+		return m_pDefensiveAttacker;
+	}
+
+	return DetermineBestDefensiveAttacker();
 }
