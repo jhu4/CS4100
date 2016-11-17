@@ -103,6 +103,7 @@ void HuDefending::Enter(AbstSoccerTeam* team)
   
   //**
   PlayerBase* defender = ((HuSoccerTeam*)team)->DetermineBestDefender();
+  PlayerBase* guarder = ((HuSoccerTeam*)team)->DetermineBestGuarder();
   if (defender != NULL) {
 	  Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 		  defender->ID(),
@@ -110,7 +111,15 @@ void HuDefending::Enter(AbstSoccerTeam* team)
 		  Msg_Defender,
 		  NULL);
   }
+  if (guarder != NULL) {
+	  Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+		  guarder->ID(),
+		  guarder->ID(),
+		  Msg_Defender,
+		  NULL);
+  }
   ((HuSoccerTeam*)team)->SetDefender(defender);
+  ((HuSoccerTeam*)team)->SetGuarder(guarder);
 
   //if a player is in either the Wait or ReturnToHomeRegion states, its
   //steering target must be updated to that of its new home region
@@ -119,6 +128,18 @@ void HuDefending::Enter(AbstSoccerTeam* team)
 
 void HuDefending::Execute(AbstSoccerTeam* team)
 {
+	if (((HuSoccerTeam*)team)->Defender() == NULL) {
+		PlayerBase* defender = ((HuSoccerTeam*)team)->DetermineBestDefender();
+		if (defender != NULL) {
+			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+				defender->ID(),
+				defender->ID(),
+				Msg_Defender,
+				NULL);
+		}
+		((HuSoccerTeam*)team)->SetDefender(defender);
+	}
+
 	//if in control change states
 	if (!((HuSoccerTeam*)team)->isBallInOurHalf()) {
 		if (!team->InControl()) {
@@ -133,6 +154,7 @@ void HuDefending::Execute(AbstSoccerTeam* team)
 
 void HuDefending::Exit(AbstSoccerTeam* team){
 	PlayerBase* defender = ((HuSoccerTeam*)team)->Defender();
+	PlayerBase* guarder = ((HuSoccerTeam*)team)->Guarder();
 	if (defender!=NULL) {
 		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 			defender->ID(),
@@ -141,6 +163,16 @@ void HuDefending::Exit(AbstSoccerTeam* team){
 			NULL);
 		//there is no supporting player for defensive attacker
 		((HuSoccerTeam*)team)->SetDefender(NULL);
+	}
+
+	if (guarder != NULL) {
+		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+			guarder->ID(),
+			guarder->ID(),
+			Msg_GoHome,
+			NULL);
+		//there is no supporting player for defensive attacker
+		((HuSoccerTeam*)team)->SetGuarder(NULL);
 	}
 	return;
 }
