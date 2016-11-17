@@ -85,7 +85,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
         m_Players.push_back(new FieldPlayer(this,
-                               8,
+                               7,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
                                Vector2D(0,1),
@@ -102,7 +102,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
         m_Players.push_back(new FieldPlayer(this,
-                               3,
+                               8,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
                                Vector2D(0,1),
@@ -162,7 +162,7 @@ void HuSoccerTeam::CreatePlayers()
                                PlayerBase::attacker));
 
     m_Players.push_back(new FieldPlayer(this,
-                               11,
+                               10,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
                                Vector2D(0,-1),
@@ -177,7 +177,7 @@ void HuSoccerTeam::CreatePlayers()
 
  
     m_Players.push_back(new FieldPlayer(this,
-                               13,
+                               11,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
                                Vector2D(0,-1),
@@ -191,7 +191,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
     m_Players.push_back(new FieldPlayer(this,
-                               14,
+                               13,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
                                Vector2D(0,-1),

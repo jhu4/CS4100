@@ -51,14 +51,14 @@ void HuAttacking::Enter(AbstSoccerTeam* team)
 void HuAttacking::Execute(AbstSoccerTeam* team)
 {
   
-	if (((HuSoccerTeam*)team)->isBallInOurHalf()) {
+	if ((!team->InControl() && !((HuSoccerTeam*)team)->isBallInOurHalf())
+	||(team->InControl() && ((HuSoccerTeam*)team)->isBallInOurHalf())){
+		team->GetFSM()->ChangeState(HuDefensiveAttack::Instance()); return;
+	}
+	else if (!team->InControl() && ((HuSoccerTeam*)team)->isBallInOurHalf()) {
 		team->GetFSM()->ChangeState(HuDefending::Instance()); return;
 	}
-	else {
-		if (!team->InControl()) {
-			team->GetFSM()->ChangeState(HuDefensiveAttack::Instance()); return;
-		}
-	}
+	
 
   //calculate the best position for any supporting attacker to move to
   team->DetermineBestSupportingPosition();
@@ -128,14 +128,13 @@ void HuDefending::Enter(AbstSoccerTeam* team)
 
 void HuDefending::Execute(AbstSoccerTeam* team)
 {
-	//if in control change states
-	if (!((HuSoccerTeam*)team)->isBallInOurHalf()) {
-		if (!team->InControl()) {
-			team->GetFSM()->ChangeState(HuDefensiveAttack::Instance()); return;
-		}
-		else {
-			team->GetFSM()->ChangeState(HuAttacking::Instance()); return;
-		}
+	
+	if ((!team->InControl()&&!((HuSoccerTeam*)team)->isBallInOurHalf())
+		||(team->InControl() && ((HuSoccerTeam*)team)->isBallInOurHalf())){
+		team->GetFSM()->ChangeState(HuDefensiveAttack::Instance()); return;
+	}
+	else if(team->InControl() && !((HuSoccerTeam*)team)->isBallInOurHalf()){
+		team->GetFSM()->ChangeState(HuAttacking::Instance()); return;
 	}
 
 	if (((HuSoccerTeam*)team)->Defender() == NULL) {
@@ -267,7 +266,7 @@ void HuDefensiveAttack::Enter(AbstSoccerTeam* team)
 
 void HuDefensiveAttack::Execute(AbstSoccerTeam* team)
 {	
-	if (team->InControl()) {
+	if (team->InControl() && !((HuSoccerTeam*)team)->isBallInOurHalf()) {
 		team->GetFSM()->ChangeState(HuAttacking::Instance()); 
 		return;
 	}
