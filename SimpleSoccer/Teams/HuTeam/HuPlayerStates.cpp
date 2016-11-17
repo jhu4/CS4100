@@ -909,13 +909,33 @@ HuGuarder* HuGuarder::Instance()
 
 void HuGuarder::Enter(FieldPlayer* player) {
 	player->Steering()->InterposeOn(HU_INTERPOSE_DIST);
+
+	player->Steering()->SetTarget(player->Team()->HomeGoal()->Center());
+
 }
 
 void HuGuarder::Execute(FieldPlayer* player) {
+	if (player->isClosestTeamMemberToBall() && (player->Team()->Receiver() == NULL) &&
+		(!player->Pitch()->GoalKeeperHasBall())) {
+		player->GetFSM()->ChangeState(HuChaseBall::Instance());
+
+		//let the new defender to do its job!
+		PlayerBase* newGuarder = ((HuSoccerTeam*)player->Team())->DetermineBestGuarder();
+		if (newGuarder != NULL) {
+			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+				newGuarder->ID(),
+				newGuarder->ID(),
+				Msg_Guarder,
+				NULL);
+		}
+		((HuSoccerTeam*)player->Team())->SetGuarder(newGuarder);
+		return;
+	}
 
 }
 void HuGuarder::Exit(FieldPlayer* player) {
 	player->Steering()->InterposeOff();
+	((HuSoccerTeam*)player->Team())->SetGuarder(NULL);
 }
 
 

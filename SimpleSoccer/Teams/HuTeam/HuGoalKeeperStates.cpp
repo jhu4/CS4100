@@ -77,7 +77,9 @@ HuTendGoal* HuTendGoal::Instance()
 void HuTendGoal::Enter(GoalKeeper* keeper)
 {
   //turn interpose on
-  keeper->Steering()->InterposeOn(Prm.GoalKeeperTendingDistance);
+  //*GoalKeeperTendingDistance was default as 20;
+	double	GoalKeeperTendingDistance = 50.0;
+  keeper->Steering()->InterposeOn(GoalKeeperTendingDistance);
 
   //interpose will position the agent between the ball position and a target
   //position situated along the goal mouth. This call sets the target
@@ -105,7 +107,7 @@ void HuTendGoal::Execute(GoalKeeper* keeper)
 
   //if ball is within a predefined distance, the keeper moves out from
   //position to try and intercept it.
-  if (keeper->BallWithinRangeForIntercept() && !keeper->Team()->InControl())
+  if (keeper->BallWithinRangeForIntercept() && keeper->isThreatened()/* && !keeper->Team()->InControl()*/)
   {
     keeper->GetFSM()->ChangeState(HuInterceptBall::Instance());
   }

@@ -492,7 +492,8 @@ PlayerBase* HuSoccerTeam::DetermineBestGuarder() {
 		FieldPlayer* plyr = static_cast<FieldPlayer*>(*it);
 
 		if ((plyr->Role() != PlayerBase::goal_keeper) &&
-				plyr!=Defender() &&
+			 plyr!=Defender() &&
+			!plyr->isClosestTeamMemberToBall() &&
 			!(plyr->GetFSM()->isInState(*HuChaseBall::Instance())))
 		{
 

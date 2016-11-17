@@ -115,7 +115,7 @@ void HuDefending::Enter(AbstSoccerTeam* team)
 	  Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 		  guarder->ID(),
 		  guarder->ID(),
-		  Msg_Defender,
+		  Msg_Guarder,
 		  NULL);
   }
   ((HuSoccerTeam*)team)->SetDefender(defender);
@@ -128,6 +128,16 @@ void HuDefending::Enter(AbstSoccerTeam* team)
 
 void HuDefending::Execute(AbstSoccerTeam* team)
 {
+	//if in control change states
+	if (!((HuSoccerTeam*)team)->isBallInOurHalf()) {
+		if (!team->InControl()) {
+			team->GetFSM()->ChangeState(HuDefensiveAttack::Instance()); return;
+		}
+		else {
+			team->GetFSM()->ChangeState(HuAttacking::Instance()); return;
+		}
+	}
+
 	if (((HuSoccerTeam*)team)->Defender() == NULL) {
 		PlayerBase* defender = ((HuSoccerTeam*)team)->DetermineBestDefender();
 		if (defender != NULL) {
@@ -140,15 +150,6 @@ void HuDefending::Execute(AbstSoccerTeam* team)
 		((HuSoccerTeam*)team)->SetDefender(defender);
 	}
 
-	//if in control change states
-	if (!((HuSoccerTeam*)team)->isBallInOurHalf()) {
-		if (!team->InControl()) {
-			team->GetFSM()->ChangeState(HuDefensiveAttack::Instance()); return;
-		}
-		else {
-			team->GetFSM()->ChangeState(HuAttacking::Instance()); return;
-		}
-	}
 }
 
 
@@ -266,19 +267,6 @@ void HuDefensiveAttack::Enter(AbstSoccerTeam* team)
 
 void HuDefensiveAttack::Execute(AbstSoccerTeam* team)
 {	
-
-	if (((HuSoccerTeam*)team)->DefensiveAttacker() == NULL) {
-		PlayerBase* defensiveattacker = ((HuSoccerTeam*)team)->DetermineBestDefensiveAttacker();
-		if (defensiveattacker != NULL) {
-			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-				defensiveattacker->ID(),
-				defensiveattacker->ID(),
-				Msg_Defender,
-				NULL);
-		}
-		((HuSoccerTeam*)team)->SetDefensiveAttacker(defensiveattacker);
-	}
-
 	if (team->InControl()) {
 		team->GetFSM()->ChangeState(HuAttacking::Instance()); 
 		return;
@@ -288,6 +276,17 @@ void HuDefensiveAttack::Execute(AbstSoccerTeam* team)
 		return;
 	}
 
+	if (((HuSoccerTeam*)team)->DefensiveAttacker() == NULL) {
+		PlayerBase* defensiveattacker = ((HuSoccerTeam*)team)->DetermineBestDefensiveAttacker();
+		if (defensiveattacker != NULL) {
+			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+				defensiveattacker->ID(),
+				defensiveattacker->ID(),
+				Msg_DefensiveAttacker,
+				NULL);
+		}
+		((HuSoccerTeam*)team)->SetDefensiveAttacker(defensiveattacker);
+	}
 }
 
 void HuDefensiveAttack::Exit(AbstSoccerTeam* team)
