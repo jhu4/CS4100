@@ -408,6 +408,7 @@ PlayerBase* HuSoccerTeam::DetermineBestDefensiveAttacker()
 
 		//Find a defensive attacker who is not the closet to the ball
 		if ((plyr->Role() != PlayerBase::goal_keeper) && 
+			!plyr->isClosestTeamMemberToBall() &&
 			((plyr->GetFSM()->isInState(*HuWait::Instance())) || (plyr->GetFSM()->isInState(*HuReturnToHomeRegion::Instance()))) &&
 			!(plyr->GetFSM()->isInState(*HuChaseBall::Instance())))
 		{

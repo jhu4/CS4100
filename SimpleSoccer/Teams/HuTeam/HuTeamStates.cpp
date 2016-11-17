@@ -266,6 +266,19 @@ void HuDefensiveAttack::Enter(AbstSoccerTeam* team)
 
 void HuDefensiveAttack::Execute(AbstSoccerTeam* team)
 {	
+
+	if (((HuSoccerTeam*)team)->DefensiveAttacker() == NULL) {
+		PlayerBase* defensiveattacker = ((HuSoccerTeam*)team)->DetermineBestDefensiveAttacker();
+		if (defensiveattacker != NULL) {
+			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+				defensiveattacker->ID(),
+				defensiveattacker->ID(),
+				Msg_Defender,
+				NULL);
+		}
+		((HuSoccerTeam*)team)->SetDefensiveAttacker(defensiveattacker);
+	}
+
 	if (team->InControl()) {
 		team->GetFSM()->ChangeState(HuAttacking::Instance()); 
 		return;
