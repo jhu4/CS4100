@@ -877,7 +877,6 @@ void HuDefender::Execute(FieldPlayer* player) {
 				Msg_Defender,
 				NULL);
 		}
-
 		((HuSoccerTeam*)player->Team())->SetDefender(newDefender);
 		return;
 	}

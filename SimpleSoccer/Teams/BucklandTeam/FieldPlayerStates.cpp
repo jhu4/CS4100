@@ -16,11 +16,7 @@
 
 
 //uncomment below to send state info to the debug window
-<<<<<<< HEAD
 //#define PLAYER_STATE_INFO_ON
-=======
-#define PLAYER_STATE_INFO_ON
->>>>>>> c4b9654db7364d58f930200457dc677c28e94fed
 
 
 //************************************************************************ Global state

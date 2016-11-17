@@ -28,8 +28,8 @@ void HuAttacking::Enter(AbstSoccerTeam* team)
 //#endif
 
   //these define the home regions for this state of each of the players
-  const int BlueRegions[TeamSize] = { 1,14,13,12,10 };
-  const int RedRegions[TeamSize] = { 16,2,3,7,13 };
+  const int BlueRegions[TeamSize] = { 1,14,12,13,10 };
+  const int RedRegions[TeamSize] = { 16,5,3,4,7 };
 
   //set up the player's home regions
   if (team->Color() == AbstSoccerTeam::blue)
@@ -88,8 +88,8 @@ void HuDefending::Enter(AbstSoccerTeam* team)
 #endif
 
   //these define the home regions for this state of each of the players
-  const int BlueRegions[TeamSize] = { 1,3,4,5,7 };
-  const int RedRegions[TeamSize] = { 16,13,11,9,4 };
+  const int BlueRegions[TeamSize] = { 1,3,7,5,1 };
+  const int RedRegions[TeamSize] = { 16,12,10,14,16 };
 
   //set up the player's home regions
   if (team->Color() == AbstSoccerTeam::blue)
@@ -203,8 +203,8 @@ void HuDefensiveAttack::Enter(AbstSoccerTeam* team)
 	debug_con << team->Name() << " entering HuDefensiveAttack state" << "";
 #endif
 
-	const int BlueRegions[TeamSize] = { 1,7,9,10,11 };
-	const int RedRegions[TeamSize] = { 16,13,11,9,4 };
+	const int BlueRegions[TeamSize] = { 1,9,13,11,10 };
+	const int RedRegions[TeamSize] = { 16,6,4,8,7 };
 
 	//set up the player's home regions
 	if (team->Color() == AbstSoccerTeam::blue)

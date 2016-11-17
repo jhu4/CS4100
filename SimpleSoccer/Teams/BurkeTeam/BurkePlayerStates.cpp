@@ -17,7 +17,7 @@
 
 
 //uncomment below to send state info to the debug window
-#define PLAYER_STATE_INFO_ON
+//#define PLAYER_STATE_INFO_ON
 
 
 //************************************************************************ Global state

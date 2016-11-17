@@ -70,7 +70,7 @@ void HuSoccerTeam::CreatePlayers()
  
     //create the players
     m_Players.push_back(new FieldPlayer(this,
-                               4,
+                               6,
                                HuWait::Instance(),
 							   HuGlobalPlayerState::Instance(),
                                Vector2D(0,1),
@@ -102,7 +102,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
         m_Players.push_back(new FieldPlayer(this,
-                               7,
+                               3,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
                                Vector2D(0,1),
@@ -116,7 +116,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
         m_Players.push_back(new FieldPlayer(this,
-                               6,
+                               4,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
                                Vector2D(0,1),
@@ -149,7 +149,7 @@ void HuSoccerTeam::CreatePlayers()
 
     //create the players
     m_Players.push_back(new FieldPlayer(this,
-                               13,
+                               9,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
                                Vector2D(0,-1),
@@ -177,7 +177,7 @@ void HuSoccerTeam::CreatePlayers()
 
  
     m_Players.push_back(new FieldPlayer(this,
-                               10,
+                               13,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
                                Vector2D(0,-1),
@@ -191,7 +191,7 @@ void HuSoccerTeam::CreatePlayers()
 
 
     m_Players.push_back(new FieldPlayer(this,
-                               9,
+                               14,
                                HuWait::Instance(),
                                HuGlobalPlayerState::Instance(),
                                Vector2D(0,-1),
@@ -335,6 +335,7 @@ void HuSoccerTeam::UpdateTargetsOfWaitingPlayers()const
       if ( plyr->GetFSM()->isInState(*HuWait::Instance()) ||
            plyr->GetFSM()->isInState(*HuReturnToHomeRegion::Instance()) )
       {
+		  //plyr->GetFSM()->ChangeState(HuChaseBall::Instance());
         plyr->Steering()->SetTarget(plyr->HomeRegion()->Center());
       }
     }
@@ -453,6 +454,9 @@ PlayerBase* HuSoccerTeam::DetermineBestDefender()
 			if (Opponents()->SupportingPlayer()!=NULL) {
 				dist = Vec2DDistanceSq(plyr->Pos(), Opponents()->SupportingPlayer()->Pos());
 			}
+			else if(Opponents()->ControllingPlayer() != NULL){
+				dist = Vec2DDistanceSq(plyr->Pos(), Opponents()->ControllingPlayer()->Pos());
+			}
 			else {
 				dist = plyr->DistToHomeGoal();
 			}
@@ -483,13 +487,14 @@ PlayerBase* HuSoccerTeam::DetermineBestGuarder() {
 
 	for (it; it != m_Players.end(); ++it)
 	{
+		FieldPlayer* plyr = static_cast<FieldPlayer*>(*it);
 
-		//Find a defensive attacker who is not the closet to the ball
-		if (((*it)->Role() != PlayerBase::goal_keeper) && (!(*it)->isClosestTeamMemberToBall()))
+		if ((plyr->Role() != PlayerBase::goal_keeper) &&
+				plyr!=Defender() &&
+			!(plyr->GetFSM()->isInState(*HuChaseBall::Instance())))
 		{
-			if (Opponents()->InControl()) {
-				dist = Vec2DDistanceSq((*it)->Pos(), Opponents()->SupportingPlayer()->Pos());
-			}
+
+			dist = plyr->DistToHomeGoal();
 
 			//if the distance is the closest so far and the player is not a
 			//goalkeeper and the player is not the one currently controlling
@@ -498,7 +503,7 @@ PlayerBase* HuSoccerTeam::DetermineBestGuarder() {
 			{
 				ClosestSoFar = dist;
 
-				BestPlayer = (*it);
+				BestPlayer = plyr;
 			}
 		}
 	}

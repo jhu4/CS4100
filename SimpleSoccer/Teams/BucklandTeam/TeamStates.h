@@ -1,11 +1,7 @@
 #ifndef TEAMSTATES_H
 #define TEAMSTATES_H
 
-<<<<<<< HEAD
 //#define	DEBUG_TEAM_STATES
-=======
-#define	DEBUG_TEAM_STATES
->>>>>>> c4b9654db7364d58f930200457dc677c28e94fed
 //------------------------------------------------------------------------
 //
 //  Name: TeamStates.h
