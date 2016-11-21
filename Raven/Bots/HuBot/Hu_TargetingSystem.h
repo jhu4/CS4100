@@ -31,6 +31,8 @@ public:
   //to null
   void       Update();
 
+  //*HU Check if a bot is within the range of the weapon and can be killed in one shot
+  bool		CanBeKilledInAShot(AbstRaven_Bot* bot);
 };
 
 

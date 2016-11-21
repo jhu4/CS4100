@@ -223,3 +223,7 @@ void			Hu_Bot::SelectHeadPen()
 std::string const Hu_Bot::GetName () const { return "Hu"; }
 
 
+//*HU
+double Hu_Bot::GetDistanceToBot(AbstRaven_Bot* bot) {
+	return Vec2DDistance(bot->Pos(), this->Pos());
+}

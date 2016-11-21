@@ -1,8 +1,13 @@
 #include "Hu_TargetingSystem.h"
+#include "Hu_Bot.h"
+
+#include "../../lua/Raven_Scriptor.h"
 #include "../../AbstRaven_Bot.h"
 #include "../../Raven_SensoryMemory.h"
-
-
+#include "../../AbstWeaponSystem.h"
+#include "../../armory/Raven_Weapon.h"
+#include "../../Raven_ObjectEnumerations.h"
+#include "../../Debug/DebugConsole.h"
 
 //-------------------------------- ctor ---------------------------------------
 //-----------------------------------------------------------------------------
@@ -31,7 +36,14 @@ void Hu_TargetingSystem::Update()
     //make sure the bot is alive and that it is not the owner
     if ((*curBot)->isAlive() && (*curBot != m_pOwner) )
     {
-      //double dist = Vec2DDistanceSq((*curBot)->Pos(), m_pOwner->Pos());
+      
+		//*HU
+		if (CanBeKilledInAShot(*curBot)) {
+			m_pCurrentTarget = *curBot;
+			return;
+		}
+		
+		//double dist = Vec2DDistanceSq((*curBot)->Pos(), m_pOwner->Pos());
 		int health = (*curBot)->Health();
 
       if (health < LowestHealthSoFar)
@@ -41,4 +53,52 @@ void Hu_TargetingSystem::Update()
       }
     }
   }
+}
+
+//*HU
+bool Hu_TargetingSystem::CanBeKilledInAShot(AbstRaven_Bot* bot) {
+	int bot_health = bot->Health();
+	Raven_Weapon* weapon = m_pOwner->GetWeaponSys()->GetCurrentWeapon();
+	
+	double dist = ((Hu_Bot*)m_pOwner)->GetDistanceToBot(bot);
+	double range = weapon->GetIdealRange();
+
+	
+
+	if(dist<=range){
+		switch(weapon->GetType()){
+			case	type_rail_gun:
+				if (bot_health <= script->GetDouble("Slug_Damage")) {
+					debug_con << "Dist: " << dist << "    Range:" << range << "";
+					debug_con << "One Shot Kill: Railgun" << "";
+					return true;
+				}
+				break;
+			case	type_rocket_launcher:
+				if (bot_health <= script->GetDouble("Rocket_Damage")) {
+					debug_con << "Dist: " << dist << "    Range:" << range << "";
+					debug_con << "One Shot Kill: RocketLauncher" << "";
+					return true;
+				}
+				break;
+			case	type_shotgun:
+				if (bot_health <= script->GetDouble("Pellet_Damage")) {
+					debug_con << "Dist: " << dist << "    Range:" << range << "";
+					debug_con << "One Shot Kill: Shotgun" << "";
+					return true;
+				}
+				break;
+			case	type_blaster:
+				if (bot_health <= script->GetDouble("Bolt_Damage")) {
+					debug_con << "Dist: " << dist << "    Range:" << range << "";
+					debug_con << "One Shot Kill: Blaster" << "";
+					return true;
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
+	return false;
 }

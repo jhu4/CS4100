@@ -57,6 +57,9 @@ public:
 
   bool canDodgeRight(Vector2D& PositionToDodge, Vector2D destination)const;
   bool canDodgeLeft(Vector2D& PositionToDodge, Vector2D destination)const;
+
+  //*HU Get the distance btw myself and another bot
+  double GetDistanceToBot(AbstRaven_Bot* bot);
 };
 
 #endif
