@@ -89,6 +89,9 @@
     <Filter Include="Bots\RB_Bot">
       <UniqueIdentifier>{b4de59ea-f1f7-4365-b7e3-d1706fe20b3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Bots\Hu_Bot">
+      <UniqueIdentifier>{7ca1105c-36fb-4abf-a5f4-40e1d47ede00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -318,6 +321,27 @@
     </ClCompile>
     <ClCompile Include="bots\rbbot\RBGoal_Think.cpp">
       <Filter>Bots\RB_Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="Bots\HuBot\Hu_Bot.cpp">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="Bots\HuBot\Hu_BotMaker.cpp">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="Bots\HuBot\Hu_BotScriptor.cpp">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="Bots\HuBot\Hu_BotSteeringBehaviors.cpp">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="Bots\HuBot\Hu_TargetingSystem.cpp">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="Bots\HuBot\Hu_WeaponSystem.cpp">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="Bots\HuBot\HuGoal_Think.cpp">
+      <Filter>Bots\Hu_Bot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -684,6 +708,27 @@
     <ClInclude Include="..\Common\script\LuaHelperFunctions.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Bots\HuBot\Hu_Bot.h">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="Bots\HuBot\Hu_BotMaker.h">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="Bots\HuBot\Hu_BotScriptor.h">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="Bots\HuBot\Hu_BotSteeringBehaviors.h">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="Bots\HuBot\Hu_TargetingSystem.h">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="Bots\HuBot\Hu_WeaponSystem.h">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="Bots\HuBot\HuGoal_Think.h">
+      <Filter>Bots\Hu_Bot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Params.lua">
@@ -697,6 +742,9 @@
     </None>
     <None Include="bots\rbbot\RB_Bot.lua">
       <Filter>Bots\RB_Bot</Filter>
+    </None>
+    <None Include="Bots\HuBot\Hu_Bot.lua">
+      <Filter>Bots\Hu_Bot</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -217,6 +217,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bots\HuBot\HuGoal_Think.cpp" />
+    <ClCompile Include="Bots\HuBot\Hu_Bot.cpp" />
+    <ClCompile Include="Bots\HuBot\Hu_BotMaker.cpp" />
+    <ClCompile Include="Bots\HuBot\Hu_BotScriptor.cpp" />
+    <ClCompile Include="Bots\HuBot\Hu_BotSteeringBehaviors.cpp" />
+    <ClCompile Include="Bots\HuBot\Hu_TargetingSystem.cpp" />
+    <ClCompile Include="Bots\HuBot\Hu_WeaponSystem.cpp" />
     <ClCompile Include="main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -872,6 +879,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\script\LuaHelperFunctions.h" />
+    <ClInclude Include="Bots\HuBot\HuGoal_Think.h" />
+    <ClInclude Include="Bots\HuBot\Hu_Bot.h" />
+    <ClInclude Include="Bots\HuBot\Hu_BotMaker.h" />
+    <ClInclude Include="Bots\HuBot\Hu_BotScriptor.h" />
+    <ClInclude Include="Bots\HuBot\Hu_BotSteeringBehaviors.h" />
+    <ClInclude Include="Bots\HuBot\Hu_TargetingSystem.h" />
+    <ClInclude Include="Bots\HuBot\Hu_WeaponSystem.h" />
     <ClInclude Include="Raven_Game.h" />
     <ClInclude Include="Raven_Map.h" />
     <ClInclude Include="armory\Raven_Weapon.h" />
@@ -994,6 +1008,7 @@
     <ClInclude Include="bots\rbbot\RBGoal_Think.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Bots\HuBot\Hu_Bot.lua" />
     <None Include="Params.lua" />
     <None Include="maps\Raven_DM1.map" />
     <None Include="bots\ravenbot\Raven_Bot.lua" />

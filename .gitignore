@@ -1,0 +1,6 @@
+*/*.VC.db
+*/*.vcxproj
+*/*.vcxproj.filters
+*/*.sln
+*/Debug/*
+*/*.VC.VC.opendb

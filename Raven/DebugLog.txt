@@ -1,0 +1,4 @@
+BOT 401 IS STUCK!!
+deleting Hu bot (id = 401)
+deleting raven bot (id = 402)
+deleting raven bot (id = 403)

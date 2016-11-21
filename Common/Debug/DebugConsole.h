@@ -39,11 +39,7 @@ const int DEBUG_WINDOW_HEIGHT = 400;
 
 //uncomment line below to use debugging console
 //otherwise all debug messages go to a sink (see below)
-<<<<<<< HEAD
 #define DEBUG
-=======
-//#define DEBUG
->>>>>>> c4b9654db7364d58f930200457dc677c28e94fed
 
 #ifdef DEBUG
 #define debug_con *(DebugConsole::Instance())

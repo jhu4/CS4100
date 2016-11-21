@@ -8,7 +8,7 @@ NumBots = 3
 
 BotNames = {}
 
-BotNames[1] = "RB_Bot"
+BotNames[1] = "Hu_Bot"
 BotNames[2] = "Raven_Bot"
 BotNames[3] = "Raven_Bot"
 
