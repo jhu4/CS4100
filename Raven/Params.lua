@@ -89,8 +89,8 @@ Bolt_MaxSpeed    = 5
 Bolt_Mass        = 1
 Bolt_MaxForce    = 100.0
 Bolt_Scale       = Bot_Scale
-Bolt_Damage      = 1
-
+--Bolt_Damage      = 1
+Bolt_Damage      = 10
 
 
 RocketLauncher_FiringFreq       = 1.5
@@ -104,7 +104,8 @@ Rocket_MaxSpeed    = 3
 Rocket_Mass        = 1
 Rocket_MaxForce    = 10.0
 Rocket_Scale       = Bot_Scale
-Rocket_Damage      = 5
+--Rocket_Damage      = 5
+Rocket_Damage			 = 50
 Rocket_ExplosionDecayRate = 2.0   --how fast the explosion occurs (in secs)
 
 
@@ -119,8 +120,8 @@ Slug_Mass        = 0.1
 Slug_MaxForce    = 10000.0
 Slug_Scale       = Bot_Scale
 Slug_Persistance = 0.2
-Slug_Damage      = 10
-
+--Slug_Damage      = 10
+Slug_Damage      = 100
 
 
 ShotGun_FiringFreq       = 1
@@ -136,7 +137,7 @@ Pellet_Mass        = 0.1
 Pellet_MaxForce    = 1000.0
 Pellet_Scale       = Bot_Scale
 Pellet_Persistance = 0.1
-Pellet_Damage      = 1
-
+--Pellet_Damage      = 1
+Pellet_Damage      = 10
 
   

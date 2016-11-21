@@ -7,7 +7,8 @@
 #include "../../AbstWeaponSystem.h"
 #include "../../armory/Raven_Weapon.h"
 #include "../../Raven_ObjectEnumerations.h"
-#include "../../Debug/DebugConsole.h"
+#include "Debug\DebugConsole.h"
+//#include "../../Debug/DebugConsole.h"
 
 //-------------------------------- ctor ---------------------------------------
 //-----------------------------------------------------------------------------
@@ -69,29 +70,29 @@ bool Hu_TargetingSystem::CanBeKilledInAShot(AbstRaven_Bot* bot) {
 		switch(weapon->GetType()){
 			case	type_rail_gun:
 				if (bot_health <= script->GetDouble("Slug_Damage")) {
-					debug_con << "Dist: " << dist << "    Range:" << range << "";
-					debug_con << "One Shot Kill: Railgun" << "";
+					debug_con << "Dist: " << dist << "Range:" << range << " Weapon dmg:"<< script->GetDouble("Slug_Damage") << "";
+					debug_con << "One shot Killing " << bot->GetName() << " with Railgun" << "";
 					return true;
 				}
 				break;
 			case	type_rocket_launcher:
 				if (bot_health <= script->GetDouble("Rocket_Damage")) {
-					debug_con << "Dist: " << dist << "    Range:" << range << "";
-					debug_con << "One Shot Kill: RocketLauncher" << "";
+					debug_con << "Dist: " << dist << " Range:" << range << " Weapon dmg:" << script->GetDouble("Rocket_Damage") << "";
+					debug_con << "One shot Killing " << bot->GetName() << " with Rocket Launcher" << "";
 					return true;
 				}
 				break;
 			case	type_shotgun:
 				if (bot_health <= script->GetDouble("Pellet_Damage")) {
-					debug_con << "Dist: " << dist << "    Range:" << range << "";
-					debug_con << "One Shot Kill: Shotgun" << "";
+					debug_con << "Dist: " << dist << " Range:" << range << " Weapon dmg:" << script->GetDouble("Pellet_Damage") << "";
+					debug_con << "One shot Killing " << bot->GetName() << " with Shot gun" << "";
 					return true;
 				}
 				break;
 			case	type_blaster:
 				if (bot_health <= script->GetDouble("Bolt_Damage")) {
-					debug_con << "Dist: " << dist << "    Range:" << range << "";
-					debug_con << "One Shot Kill: Blaster" << "";
+					debug_con << "Dist: " << dist << " Range:" << range << " Weapon dmg:" << script->GetDouble("Bolt_Damage") << "";
+					debug_con << "One shot Killing " << bot->GetName() << " with Blaster" << "";
 					return true;
 				}
 				break;
