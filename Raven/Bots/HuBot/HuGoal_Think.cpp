@@ -5,6 +5,9 @@
 #include "misc/utils.h"
 #include "Hu_BotScriptor.h"
 
+#include "Hu_Goal_StealHealth.h"
+
+
 #include "../../goals/Goal_MoveToPosition.h"
 #include "../../goals/Goal_Explore.h"
 #include "../../goals/Goal_GetItem.h"
