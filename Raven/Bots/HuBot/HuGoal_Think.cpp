@@ -3,6 +3,7 @@
 #include "misc/Cgdi.h"
 #include "../../Raven_ObjectEnumerations.h"
 #include "misc/utils.h"
+#include "Debug/DebugConsole.h"
 
 #include "Hu_BotScriptor.h"
 #include "Hu_Goal_StealHealth.h"
@@ -59,6 +60,8 @@ HuGoal_Think::~HuGoal_Think()
 
 void HuGoal_Think::AddGoal_StealHealth(AbstRaven_Bot* target_bot,Trigger<AbstRaven_Bot>* health_pack)
 {
+	debug_con << "AddGoal_StealHealth" << "";
+
 	if (notPresent(Hu_goal_steal_health))
 	{
 		RemoveAllSubgoals();

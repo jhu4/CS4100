@@ -40,7 +40,7 @@ Bot_RailgunGoalTweaker    = 0.5
 Bot_RocketLauncherTweaker = 0.6
 Bot_ExploreTweaker		  = 0.2
 Bot_AggroGoalTweaker      = 0.8
-Bot_StealHealthTweaker	  = 0.9
+Bot_StealHealthTweaker	  = 0.7
 -------------------------[[ steering parameters ]]-----------------------------
 -------------------------------------------------------------------------------
 

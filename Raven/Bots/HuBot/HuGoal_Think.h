@@ -18,7 +18,7 @@
 #include "../../Goals/Goal_Evaluator.h"
 #include "Triggers/Trigger.h"
 
-//const int Hu_goal_steal_health = 18;
+const int Hu_goal_steal_health = 18;
 
 class HuGoal_Think : public Goal_Think
 {

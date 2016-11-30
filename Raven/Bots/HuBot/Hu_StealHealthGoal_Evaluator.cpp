@@ -12,7 +12,7 @@
 #include "../../triggers/TriggerSystem.h"
 
 #include "2D\Vector2D.h"
-
+#include "Debug\DebugConsole.h"
 
 double Hu_StealHealthGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* bot) {
 	
@@ -35,11 +35,12 @@ double Hu_StealHealthGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* bot) {
 		return 0;
 	}
 	
-	const double tweaker = 1.0;
+	const double tweaker = 1;
 	
+
 	double desirability = tweaker *
-		(1 - Raven_Feature::Health(closest_opponent)) *
-		(opp_to_health/me_to_health);
+		(1 - Raven_Feature::Health(closest_opponent) * Raven_Feature::Health(closest_opponent)) *
+		(1 - Raven_Feature::DistanceToItem(closest_opponent,type_health));
 
 	Clamp(desirability, 0, 1);
 
