@@ -13,7 +13,7 @@ class Hu_Goal_StealHealth : public Goal_Composite<AbstRaven_Bot>
 {
 
 private:
-	AbstRaven_Bot* steal_from;
+	AbstRaven_Bot* target_bot;
 	Trigger<AbstRaven_Bot>* health_pack;
 
 
@@ -26,7 +26,7 @@ public:
 
 	int  Process();
 
-	void Terminate();
+	void Terminate() { m_iStatus = completed; }
 
 };
 
