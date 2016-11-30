@@ -11,6 +11,7 @@
 //-----------------------------------------------------------------------------
 #include "Script/scriptor.h"
 
+#define Hu_script Hu_BotScriptor::Instance()
 
 class Hu_BotScriptor : public Scriptor
 {

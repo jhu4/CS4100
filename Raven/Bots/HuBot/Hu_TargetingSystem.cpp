@@ -1,5 +1,6 @@
 #include "Hu_TargetingSystem.h"
 #include "Hu_Bot.h"
+#include "Hu_BotScriptor.h"
 
 #include "../../lua/Raven_Scriptor.h"
 #include "../../AbstRaven_Bot.h"
