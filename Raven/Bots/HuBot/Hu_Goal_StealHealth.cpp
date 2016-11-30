@@ -14,16 +14,17 @@ void Hu_Goal_StealHealth::Activate() {
 
 	//if the target die while the goal is activated OR
 	//if the health pack is claimed, fail the goal, fail the goal
-	if (target_bot->isDead() || !health_pack->isActive()) {
+	if (!target_bot->isAlive() || !health_pack->isActive()) {
 		m_iStatus = failed;
 		return;
 	}
 
 	else {
 		AddSubgoal(new Goal_GetItem(m_pOwner,type_health));
+		debug_con << "StealHealth activated" << "";
 	}
 
-	debug_con << "StealHealth activated" << "";
+	
 }
 
 int  Hu_Goal_StealHealth::Process() {

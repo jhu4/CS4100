@@ -57,6 +57,12 @@ HuGoal_Think::~HuGoal_Think()
 
 }
 
-void HuGoal_Think::AddGoal_StealHealth() {
+void HuGoal_Think::AddGoal_StealHealth(AbstRaven_Bot* target_bot,Trigger<AbstRaven_Bot>* health_pack)
+{
+	if (notPresent(Hu_goal_steal_health))
+	{
+		RemoveAllSubgoals();
+		AddSubgoal(new Hu_Goal_StealHealth(m_pOwner,target_bot,health_pack));
+	}
 
 }

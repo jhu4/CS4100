@@ -17,18 +17,18 @@
 double Hu_StealHealthGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* bot) {
 	
 	//find the closest active health pack
-	Trigger<AbstRaven_Bot>* closet_health_pack = ClosestActiveHealth(bot);
+	Trigger<AbstRaven_Bot>* closest_health_pack = ClosestActiveHealth(bot);
 
 	//if no active health packs
-	if (closet_health_pack == NULL)
+	if (closest_health_pack == NULL)
 	{
 		return 0;
 	}
 
-	double me_to_health = Vec2DDistanceSq(bot->Pos(), closet_health_pack->Pos());
+	double me_to_health = Vec2DDistanceSq(bot->Pos(), closest_health_pack->Pos());
 	double opp_to_health = MaxDouble;
 
-	AbstRaven_Bot* closest_opponent = ClosestBotToHealth(bot, closet_health_pack, opp_to_health);
+	AbstRaven_Bot* closest_opponent = ClosestBotToHealth(bot, closest_health_pack, opp_to_health);
 
 	//if there are no known opponents or the closest opponent closer to the health pack
 	if (closest_opponent == NULL || opp_to_health < me_to_health){
@@ -45,11 +45,15 @@ double Hu_StealHealthGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* bot) {
 
 	desirability *= m_dCharacterBias;
 
+	//save a record for the target bot and health pack
+	TargetBot = closest_opponent;
+	HealthPack = closest_health_pack;
+
 	return desirability;
 }
 
 void  Hu_StealHealthGoal_Evaluator::SetGoal(AbstRaven_Bot* bot) {
-	((HuGoal_Think*)bot->GetBrain())->AddGoal_StealHealth();
+	((HuGoal_Think*)bot->GetBrain())->AddGoal_StealHealth(TargetBot,HealthPack);
 }
 
 void Hu_StealHealthGoal_Evaluator::RenderInfo(Vector2D posistion, AbstRaven_Bot* bot) {

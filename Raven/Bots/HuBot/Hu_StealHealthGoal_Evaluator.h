@@ -9,6 +9,11 @@
 
 class Hu_StealHealthGoal_Evaluator : public Goal_Evaluator
 {
+
+private:
+	AbstRaven_Bot* TargetBot;
+	Trigger<AbstRaven_Bot>* HealthPack;
+
 public:
 
 	Hu_StealHealthGoal_Evaluator(double bias) :Goal_Evaluator(bias) {}

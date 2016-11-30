@@ -16,9 +16,9 @@
 #include "../../Goals/Goal_Think.h"
 #include "../../AbstRaven_Bot.h"
 #include "../../Goals/Goal_Evaluator.h"
+#include "Triggers/Trigger.h"
 
-
-const int Hu_goal_steal_health = 18;
+//const int Hu_goal_steal_health = 18;
 
 class HuGoal_Think : public Goal_Think
 {
@@ -30,7 +30,7 @@ public:
   ~HuGoal_Think();
 
   //*HU
-  void AddGoal_StealHealth();
+  void AddGoal_StealHealth(AbstRaven_Bot* target_bot, Trigger<AbstRaven_Bot>* health_pack);
 };
 
 
