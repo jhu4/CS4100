@@ -18,6 +18,7 @@
 #include "../../Goals/Goal_Evaluator.h"
 
 
+const int Hu_goal_steal_health = 18;
 
 class HuGoal_Think : public Goal_Think
 {
@@ -28,6 +29,8 @@ public:
   HuGoal_Think(AbstRaven_Bot* pBot);
   ~HuGoal_Think();
 
+  //*HU
+  void AddGoal_StealHealth();
 };
 
 

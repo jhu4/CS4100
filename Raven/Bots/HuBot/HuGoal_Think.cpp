@@ -3,10 +3,10 @@
 #include "misc/Cgdi.h"
 #include "../../Raven_ObjectEnumerations.h"
 #include "misc/utils.h"
+
 #include "Hu_BotScriptor.h"
-
 #include "Hu_Goal_StealHealth.h"
-
+#include "Hu_StealHealthGoal_Evaluator.h"
 
 #include "../../goals/Goal_MoveToPosition.h"
 #include "../../goals/Goal_Explore.h"
@@ -14,7 +14,6 @@
 #include "../../goals/Goal_Wander.h"
 #include "../../goals/Raven_Goal_Types.h"
 #include "../../goals/Goal_AttackTarget.h"
-
 
 #include "../../goals/GetWeaponGoal_Evaluator.h"
 #include "../../goals/GetHealthGoal_Evaluator.h"
@@ -32,7 +31,8 @@ HuGoal_Think::HuGoal_Think(AbstRaven_Bot* pBot):Goal_Think (pBot)
   double RailgunBias = pMyScript->GetDouble("Bot_RailgunGoalTweaker");
   double ExploreBias = pMyScript->GetDouble("Bot_ExploreTweaker");
   double AttackBias = pMyScript->GetDouble("Bot_AggroGoalTweaker");
-
+  //*HU
+  double StealHealthBias = pMyScript->GetDouble("Bot_StealHealthTweaker");
   // get rid of the evaluators added by the superclass
   m_Evaluators.clear();
 
@@ -46,11 +46,17 @@ HuGoal_Think::HuGoal_Think(AbstRaven_Bot* pBot):Goal_Think (pBot)
                                                      type_rail_gun));
   m_Evaluators.push_back(new GetWeaponGoal_Evaluator(RocketLauncherBias,
                                                      type_rocket_launcher));
+  //*HU
+  m_Evaluators.push_back(new Hu_StealHealthGoal_Evaluator(StealHealthBias));
 }
 
 //----------------------------- dtor ------------------------------------------
 //-----------------------------------------------------------------------------
 HuGoal_Think::~HuGoal_Think()
 {
+
+}
+
+void HuGoal_Think::AddGoal_StealHealth() {
 
 }

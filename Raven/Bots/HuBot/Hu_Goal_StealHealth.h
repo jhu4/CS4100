@@ -26,7 +26,7 @@ public:
 
 	int  Process();
 
-	void Terminate() { m_iStatus = completed; }
+	void Terminate();
 
 };
 

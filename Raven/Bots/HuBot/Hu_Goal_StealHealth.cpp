@@ -2,6 +2,9 @@
 #include "../../goals/Goal_GetItem.h"
 #include "../../Raven_ObjectEnumerations.h"
 
+
+#include "Debug\DebugConsole.h"
+
 void Hu_Goal_StealHealth::Activate() {
 	m_iStatus = active;
 
@@ -20,6 +23,7 @@ void Hu_Goal_StealHealth::Activate() {
 		AddSubgoal(new Goal_GetItem(m_pOwner,type_health));
 	}
 
+	debug_con << "StealHealth activated" << "";
 }
 
 int  Hu_Goal_StealHealth::Process() {
@@ -30,3 +34,6 @@ int  Hu_Goal_StealHealth::Process() {
 	return m_iStatus;
 }
 
+void Hu_Goal_StealHealth::Terminate() {
+	m_iStatus = completed; 
+}

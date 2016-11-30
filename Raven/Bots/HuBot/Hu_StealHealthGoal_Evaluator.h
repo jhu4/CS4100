@@ -23,7 +23,7 @@ public:
 	//Given a bot, return the pointer to the closest health pack
 	Trigger<AbstRaven_Bot>* ClosestActiveHealth(AbstRaven_Bot* opponent);
 	//Given my bot and a pointer to a health pack, return the closest opponent to the health pack
-	AbstRaven_Bot* ClosestBotToHealth(AbstRaven_Bot* mybot, Trigger<AbstRaven_Bot>* health_pack);
+	AbstRaven_Bot* ClosestBotToHealth(AbstRaven_Bot* mybot, Trigger<AbstRaven_Bot>* health_pack, double &distance);
 
 };
 

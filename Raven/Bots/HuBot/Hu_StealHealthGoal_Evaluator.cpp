@@ -1,5 +1,6 @@
 #include "Hu_StealHealthGoal_Evaluator.h"
 #include "HuGoal_Think.h"
+#include "Hu_Bot.h"
 
 #include "misc/Stream_Utility_Functions.h"
 #include "../../Raven_ObjectEnumerations.h"
@@ -8,52 +9,69 @@
 #include "../../Raven_Game.h"
 #include "../../Raven_Map.h"
 #include "../../triggers/Trigger_HealthGiver.h"
-#include "2D\Vector2D.h"
-#include "Triggers\TriggerSystem.h"
 #include "../../triggers/TriggerSystem.h"
 
+#include "2D\Vector2D.h"
 
-double Hu_StealHealthGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* pBot) {
-	//first grab the distance to the closest instance of a health item
-	double dist_to_health = Raven_Feature::DistanceToItem(pBot, type_health);
 
-	//if the distance feature is rated with a value of 1 it means that the
-	//item is either not present on the map or too far away to be worth 
-	//considering, therefore the desirability is zero
-	if (dist_to_health == 1)
+double Hu_StealHealthGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* bot) {
+	
+	//find the closest active health pack
+	Trigger<AbstRaven_Bot>* closet_health_pack = ClosestActiveHealth(bot);
+
+	//if no active health packs
+	if (closet_health_pack == NULL)
 	{
 		return 0;
 	}
 
+	double me_to_health = Vec2DDistanceSq(bot->Pos(), closet_health_pack->Pos());
+	double opp_to_health = MaxDouble;
 
-	double dist_to_bot = Raven_Feature::DistanceToItem(pBot, type_bot);
+	AbstRaven_Bot* closest_opponent = ClosestBotToHealth(bot, closet_health_pack, opp_to_health);
+
+	//if there are no known opponents or the closest opponent closer to the health pack
+	if (closest_opponent == NULL || opp_to_health < me_to_health){
+		return 0;
+	}
 	
+	const double tweaker = 1.0;
+	
+	double desirability = tweaker *
+		(1 - Raven_Feature::Health(closest_opponent)) *
+		(opp_to_health/me_to_health);
 
+	Clamp(desirability, 0, 1);
 
+	desirability *= m_dCharacterBias;
+
+	return desirability;
 }
 
-void  Hu_StealHealthGoal_Evaluator::SetGoal(AbstRaven_Bot* pEnt) {
-
+void  Hu_StealHealthGoal_Evaluator::SetGoal(AbstRaven_Bot* bot) {
+	((HuGoal_Think*)bot->GetBrain())->AddGoal_StealHealth();
 }
 
-void Hu_StealHealthGoal_Evaluator::RenderInfo(Vector2D Position, AbstRaven_Bot* pBot) {
-
+void Hu_StealHealthGoal_Evaluator::RenderInfo(Vector2D posistion, AbstRaven_Bot* bot) {
+	gdi->TextAtPos(posistion, "SH:"+ttos(CalculateDesirability(bot)));
 }
 
 
 
-Trigger<AbstRaven_Bot>* Hu_StealHealthGoal_Evaluator::ClosestActiveHealth(AbstRaven_Bot* opponent) {
+Trigger<AbstRaven_Bot>* Hu_StealHealthGoal_Evaluator::ClosestActiveHealth(AbstRaven_Bot* bot) {
 	Trigger<AbstRaven_Bot>* closest_health_pack = NULL;
 	double smallest_dist = MaxDouble;
 
 	//iterate throught all of the trigger in the map
-	Raven_Map::TriggerSystem::TriggerList trigger_list = opponent->GetWorld()->GetMap()->GetTriggers();
+	Raven_Map::TriggerSystem::TriggerList trigger_list = bot->GetWorld()->GetMap()->GetTriggers();
 	Raven_Map::TriggerSystem::TriggerList::const_iterator it;
 	for (it = trigger_list.begin(); it != trigger_list.end(); it++) {
 		
 		//only if the trigger is a health trigger, and it's active
+		//calculate the distance btw the bot and the health pack
+		//update the minimum distance and the closest bot if it can
 		if ((*it)->EntityType() == type_health && (*it)->isActive()) {
-			double dist = Vec2DDistanceSq((*it)->Pos(), opponent->Pos());
+			double dist = Vec2DDistanceSq((*it)->Pos(), bot->Pos());
 
 
 			if (dist <= smallest_dist) {
@@ -66,7 +84,7 @@ Trigger<AbstRaven_Bot>* Hu_StealHealthGoal_Evaluator::ClosestActiveHealth(AbstRa
 	return closest_health_pack;
 }
 
-AbstRaven_Bot* Hu_StealHealthGoal_Evaluator::ClosestBotToHealth(AbstRaven_Bot* mybot, Trigger<AbstRaven_Bot>* health_pack){
+AbstRaven_Bot* Hu_StealHealthGoal_Evaluator::ClosestBotToHealth(AbstRaven_Bot* mybot, Trigger<AbstRaven_Bot>* health_pack,double &distance){
 	std::list<AbstRaven_Bot*> opponent_list = mybot->GetSensoryMem()->GetListOfRecentlySensedOpponents();
 
 	double smallest_dist = MaxDouble;
@@ -82,6 +100,7 @@ AbstRaven_Bot* Hu_StealHealthGoal_Evaluator::ClosestBotToHealth(AbstRaven_Bot* m
 		if (dist <= smallest_dist) {
 			closest_bot = (*it);
 			smallest_dist = dist;
+			distance = smallest_dist;
 		}
 	}	
 

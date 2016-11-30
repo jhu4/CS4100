@@ -40,7 +40,7 @@ Bot_RailgunGoalTweaker    = 0.5
 Bot_RocketLauncherTweaker = 0.6
 Bot_ExploreTweaker		  = 0.2
 Bot_AggroGoalTweaker      = 0.8
-
+Bot_StealHealthTweaker	  = 0.9
 -------------------------[[ steering parameters ]]-----------------------------
 -------------------------------------------------------------------------------
 
@@ -64,3 +64,5 @@ WallDetectionFeelerLength = 20.0
 --used in path following. Determines how close a bot must be to a waypoint
 --before it seeks the next waypoint
 WaypointSeekDist   = 5
+
+
