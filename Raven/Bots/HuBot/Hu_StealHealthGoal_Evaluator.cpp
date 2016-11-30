@@ -43,18 +43,27 @@ void Hu_StealHealthGoal_Evaluator::RenderInfo(Vector2D Position, AbstRaven_Bot* 
 
 
 Trigger<AbstRaven_Bot>* Hu_StealHealthGoal_Evaluator::ClosestActiveHealth(AbstRaven_Bot* opponent) {
-	
+	Trigger<AbstRaven_Bot>* closest_health_pack = NULL;
+	double smallest_dist = MaxDouble;
+
 	//iterate throught all of the trigger in the map
 	Raven_Map::TriggerSystem::TriggerList trigger_list = opponent->GetWorld()->GetMap()->GetTriggers();
 	Raven_Map::TriggerSystem::TriggerList::const_iterator it;
 	for (it = trigger_list.begin(); it != trigger_list.end(); it++) {
-		//only if the trigger is a health trigger
-		if ((*it)->EntityType() == type_health) {
+		
+		//only if the trigger is a health trigger, and it's active
+		if ((*it)->EntityType() == type_health && (*it)->isActive()) {
+			double dist = Vec2DDistanceSq((*it)->Pos(), opponent->Pos());
 
+
+			if (dist <= smallest_dist) {
+				smallest_dist = dist;
+				closest_health_pack = (*it);
+			}
 		}
 	}
 
-
+	return closest_health_pack;
 }
 
 AbstRaven_Bot* Hu_StealHealthGoal_Evaluator::ClosestBotToHealth(AbstRaven_Bot* mybot, Trigger<AbstRaven_Bot>* health_pack){
