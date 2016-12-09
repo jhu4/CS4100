@@ -1,4 +1,5 @@
 #include "Hu_AttackTargetGoal_Evaluator.h"
+#include "Hu_Raven_SensoryMemory.h"
 #include "misc/cgdi.h"
 #include "misc/Stream_Utility_Functions.h"
 #include "../../AbstRaven_Bot.h"
@@ -10,14 +11,23 @@ double Hu_AttackTargetGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* pBot)
 {
 	double Desirability = 0.0;
 
+
+	//if more than one bot is in FOV do not attack
+	if (((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->NumberBotInFOV() > 1) {
+		return 0;
+	}
+
 	//only do the calculation if there is a target present
 	if (pBot->GetTargetSys()->isTargetPresent())
 	{
 		const double Tweaker = 1.0;
+		
+		AbstRaven_Bot* enemy = pBot->GetTargetBot();
 
 		Desirability = Tweaker *
 			Raven_Feature::Health(pBot) *
-			Raven_Feature::TotalWeaponStrength(pBot);
+			Raven_Feature::TotalWeaponStrength(pBot) *
+			(1 - Raven_Feature::Health(enemy));
 
 		//bias the value according to the personality of the bot
 		Desirability *= m_dCharacterBias;
@@ -30,4 +40,15 @@ double Hu_AttackTargetGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* pBot)
 void Hu_AttackTargetGoal_Evaluator::SetGoal(AbstRaven_Bot* pBot)
 {
 	((HuGoal_Think*)pBot->GetBrain())->AddGoal_Hu_AttackTarget();
+}
+
+//-------------------------- RenderInfo ---------------------------------------
+//-----------------------------------------------------------------------------
+void Hu_AttackTargetGoal_Evaluator::RenderInfo(Vector2D Position, AbstRaven_Bot* pBot)
+{
+	gdi->TextAtPos(Position, "AT: " + ttos(CalculateDesirability(pBot), 2));
+	return;
+
+	std::string s = ttos(Raven_Feature::Health(pBot)) + ", " + ttos(Raven_Feature::TotalWeaponStrength(pBot));
+	gdi->TextAtPos(Position + Vector2D(0, 12), s);
 }

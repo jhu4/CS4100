@@ -12,8 +12,10 @@ class AbstRaven_Bot;
 class Hu_Raven_SensoryMemory:public Raven_SensoryMemory
 {
 
+private:
+	AbstRaven_Bot* me;
 public: 
-	Hu_Raven_SensoryMemory(AbstRaven_Bot* owner, double MemorySpan):Raven_SensoryMemory(owner,MemorySpan){}
+	Hu_Raven_SensoryMemory(AbstRaven_Bot* owner, double MemorySpan):Raven_SensoryMemory(owner,MemorySpan),me(owner){}
 
 //*HU added
 	int NumberBotInFOV();

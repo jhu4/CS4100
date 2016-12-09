@@ -15,6 +15,7 @@ public:
 
 	void  SetGoal(AbstRaven_Bot* pEnt);
 
+	void RenderInfo(Vector2D Position, AbstRaven_Bot* pBot);
 };
 
 #endif // !HU_ATTACKTARGETGOAL_EVALUATOR
