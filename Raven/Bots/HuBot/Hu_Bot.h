@@ -19,7 +19,6 @@
 #include "../../AbstRaven_Bot.h"
 #include "Hu_BotScriptor.h"
 
-
 class Raven_PathPlanner;
 class Raven_Steering;
 class Raven_Game;

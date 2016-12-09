@@ -19,6 +19,7 @@
 #include "Triggers/Trigger.h"
 
 const int Hu_goal_steal_health = 18;
+const int Hu_goal_avoid_more = 19;
 
 class HuGoal_Think : public Goal_Think
 {
@@ -29,8 +30,9 @@ public:
   HuGoal_Think(AbstRaven_Bot* pBot);
   ~HuGoal_Think();
 
-  //*HU
+  //*HU added addGoal functions
   void AddGoal_StealHealth(AbstRaven_Bot* target_bot, Trigger<AbstRaven_Bot>* health_pack);
+  void AddGoal_Hu_AttackTarget();
 };
 
 

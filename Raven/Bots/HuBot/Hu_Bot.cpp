@@ -113,7 +113,7 @@ void Hu_Bot::DoUpdate()
     //update the sensory memory with any visual stimulus
     if (m_pVisionUpdateRegulator->isReady())
     {
-      m_pSensoryMem->UpdateVision();
+		m_pSensoryMem->UpdateVision();
     }
   
     //select the appropriate weapon to use from the weapons currently in
