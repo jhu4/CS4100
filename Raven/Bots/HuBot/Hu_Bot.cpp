@@ -11,7 +11,7 @@
 #include "../../Raven_UserOptions.h"
 #include "time/Regulator.h"
 #include "Hu_WeaponSystem.h"
-#include "../../Raven_SensoryMemory.h"
+#include "Hu_Raven_SensoryMemory.h"
 
 #include "Messaging/Telegram.h"
 #include "../../Raven_Messages.h"
@@ -60,7 +60,7 @@ Hu_Bot::Hu_Bot(Raven_Game* world,Vector2D pos): AbstRaven_Bot(world, pos)
                                         script->GetDouble("Bot_AimAccuracy"),
                                         m_pScript->GetDouble("Bot_AimPersistance"));
 
-  m_pSensoryMem = new Raven_SensoryMemory(this, m_pScript->GetDouble("Bot_MemorySpan"));
+  m_pSensoryMem = new Hu_Raven_SensoryMemory(this, m_pScript->GetDouble("Bot_MemorySpan"));
 }
 
 //-------------------------------- dtor ---------------------------------------

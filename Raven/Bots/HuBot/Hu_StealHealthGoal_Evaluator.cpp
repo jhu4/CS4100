@@ -5,7 +5,7 @@
 #include "misc/Stream_Utility_Functions.h"
 #include "../../Raven_ObjectEnumerations.h"
 #include "../../goals/Raven_Feature.h"
-#include "../../Raven_SensoryMemory.h"
+#include "Hu_Raven_SensoryMemory.h"
 #include "../../Raven_Game.h"
 #include "../../Raven_Map.h"
 #include "../../triggers/Trigger_HealthGiver.h"
