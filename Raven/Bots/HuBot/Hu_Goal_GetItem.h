@@ -4,7 +4,6 @@
 #include "../../goals/Goal_GetItem.h"
 #include <vector>
 
-
 class Hu_Goal_GetItem :public Goal_GetItem 
 {
 private: 
@@ -12,7 +11,6 @@ private:
 	Trigger<AbstRaven_Bot>* targethealthpack;
 	int type;
 	bool fightbackon;
-
 public:
 	//*HU overload constructor
 	Hu_Goal_GetItem(AbstRaven_Bot* bot, int item, std::vector<Trigger<AbstRaven_Bot>*> health) :Goal_GetItem(bot, item)
@@ -26,6 +24,7 @@ public:
 	void Activate();
 	int  Process();
 	void Terminate();
+	bool HandleMessage(const Telegram& msg);
 	bool hasItemBeenStolen()const;
 	//*HU new functions
 	Trigger<AbstRaven_Bot>* getClosestHealthPack();

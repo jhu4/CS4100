@@ -77,7 +77,7 @@ void Hu_Raven_SensoryMemory::recordAttackSource(AbstRaven_Bot* enemy) {
 			attackermap[enemy].isShootable = isOpponentShootable(enemy);
 		}
 
-		debug_con << "Add DMG source" << "";
+		//debug_con << "Add DMG source" << "";
 
 	}
 }

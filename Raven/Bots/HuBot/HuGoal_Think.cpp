@@ -9,6 +9,7 @@
 #include "Hu_Goal_StealHealth.h"
 #include "Hu_StealHealthGoal_Evaluator.h"
 #include "Hu_Goal_FightBack.h"
+#include "Hu_Goal_SnakeWalk.h"
 
 #include "../../goals/Goal_MoveToPosition.h"
 #include "../../goals/Goal_Explore.h"
@@ -93,11 +94,10 @@ void HuGoal_Think::AddGoal_GetItem(int ItemType, std::vector<Trigger<AbstRaven_B
 	}
 }
 
-//*HU
-void HuGoal_Think::AddGoal_FightBack() {
-	if (notPresent(Hu_goal_fight_back))
+void HuGoal_Think::AddGoal_SnakeWalk() {
+	if (notPresent(Hu_goal_snake_walk))
 	{
 		RemoveAllSubgoals();
-		AddSubgoal(new Hu_Goal_FightBack(m_pOwner));
+		AddSubgoal(new Hu_Goal_SnakeWalk(m_pOwner,snakewalk));
 	}
 }

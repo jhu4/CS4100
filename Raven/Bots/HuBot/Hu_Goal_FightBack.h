@@ -9,7 +9,7 @@
 #include "Triggers/Trigger.h"
 
 //*HU
-class Hu_Goal_FightBack : public Goal_Composite<AbstRaven_Bot>
+class Hu_Goal_FightBack : public Goal<AbstRaven_Bot>
 {
 
 private:
@@ -17,7 +17,7 @@ private:
 
 public:
 
-	Hu_Goal_FightBack(AbstRaven_Bot* pOwner) :Goal_Composite<AbstRaven_Bot>(pOwner,Hu_goal_fight_back){}
+	Hu_Goal_FightBack(AbstRaven_Bot* pOwner) :Goal<AbstRaven_Bot>(pOwner,Hu_goal_fight_back){}
 
 	void Activate();
 

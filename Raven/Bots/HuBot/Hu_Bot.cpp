@@ -12,7 +12,7 @@
 #include "time/Regulator.h"
 #include "Hu_WeaponSystem.h"
 #include "Hu_Raven_SensoryMemory.h"
-
+#include "Hu_TargetingSystem.h"
 #include "Messaging/Telegram.h"
 #include "../../Raven_Messages.h"
 #include "Messaging/MessageDispatcher.h"
@@ -25,7 +25,7 @@
 #include "Debug/DebugConsole.h"
 
 //-------------------------- ctor ---------------------------------------------
-Hu_Bot::Hu_Bot(Raven_Game* world,Vector2D pos): AbstRaven_Bot(world, pos)       
+Hu_Bot::Hu_Bot(Raven_Game* world,Vector2D pos): AbstRaven_Bot(world, pos), steppingtweeker(3)
 {
 	m_pScript = Hu_BotScriptor::Instance();
 	
@@ -228,4 +228,72 @@ std::string const Hu_Bot::GetName () const { return "Hu"; }
 //*HU
 double Hu_Bot::GetDistanceToBot(AbstRaven_Bot* bot) {
 	return Vec2DDistance(bot->Pos(), this->Pos());
+}
+
+
+
+//*
+bool Hu_Bot::canStepLeft(Vector2D& PositionOfStep)const
+{
+	static const double StepDistance = BRadius() * steppingtweeker;
+
+	PositionOfStep = Pos() - Facing().Perp() * StepDistance - Facing().Perp() * BRadius();
+
+	return canWalkTo(PositionOfStep);
+}
+
+bool Hu_Bot::canStepRight(Vector2D& PositionOfStep)const
+{
+	static const double StepDistance = BRadius() * steppingtweeker;
+
+	PositionOfStep = Pos() + Facing().Perp() * StepDistance + Facing().Perp() * BRadius();
+
+	return canWalkTo(PositionOfStep);
+}
+
+bool Hu_Bot::canStepForward(Vector2D& PositionOfStep)const
+{
+	static const double StepDistance = BRadius() * steppingtweeker;
+
+	PositionOfStep = Pos() + Facing() * StepDistance + Facing() * BRadius();
+
+	return canWalkTo(PositionOfStep);
+}
+
+bool Hu_Bot::canStepBackward(Vector2D& PositionOfStep)const
+{
+	static const double StepDistance = BRadius() * steppingtweeker;
+
+	PositionOfStep = Pos() - Facing() * StepDistance - Facing() * BRadius();
+
+	return canWalkTo(PositionOfStep);
+}
+
+bool Hu_Bot::canStepForwardRight(Vector2D& PositionOfStep)const
+{
+	static const double StepDistance = BRadius() * steppingtweeker;
+
+	PositionOfStep = Pos() + Facing().Perp() * StepDistance + Facing().Perp() * BRadius() + Facing() * StepDistance + Facing() * BRadius();
+
+	return canWalkTo(PositionOfStep);
+}
+
+bool Hu_Bot::canStepForwardLeft(Vector2D& PositionOfStep)const
+{
+	static const double StepDistance = BRadius() * steppingtweeker;
+
+	PositionOfStep = Pos() - Facing().Perp() * StepDistance - Facing().Perp() * BRadius() + Facing() * StepDistance + Facing() * BRadius();
+
+	return canWalkTo(PositionOfStep);
+}
+
+bool Hu_Bot::canStepBackwardRight(Vector2D& PositionOfStep)const {
+	static const double StepDistance = BRadius() * steppingtweeker;
+	PositionOfStep = Pos() - Facing() * StepDistance - Facing() * BRadius() + Facing().Perp() * StepDistance + Facing().Perp() * BRadius();
+	return canWalkTo(PositionOfStep);
+}
+bool Hu_Bot::canStepBackwardLeft(Vector2D& PositionOfStep)const {
+	static const double StepDistance = BRadius() * steppingtweeker;
+	PositionOfStep = Pos() - Facing() * StepDistance - Facing() * BRadius() - Facing().Perp() * StepDistance - Facing().Perp() * BRadius();
+	return canWalkTo(PositionOfStep);
 }

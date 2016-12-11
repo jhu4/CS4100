@@ -15,9 +15,9 @@
 
 #include "game/MovingEntity.h"
 #include "misc/utils.h"
-#include "Hu_TargetingSystem.h"
 #include "../../AbstRaven_Bot.h"
 #include "Hu_BotScriptor.h"
+#include "2D\Vector2D.h"
 
 class Raven_PathPlanner;
 class Raven_Steering;
@@ -40,7 +40,7 @@ protected:
   Hu_Bot(const Hu_Bot&);
   Hu_Bot& operator=(const Hu_Bot&);
   Hu_BotScriptor* m_pScript;
-
+  int steppingtweeker;
 public:
   
   Hu_Bot(Raven_Game* world, Vector2D pos);
@@ -59,6 +59,15 @@ public:
 
   //*HU Get the distance btw myself and another bot
   double GetDistanceToBot(AbstRaven_Bot* bot);
+  //*HU overide functions
+  bool canStepBackward(Vector2D& PositionOfStep)const;
+  bool canStepForward(Vector2D& PositionOfStep)const;
+  bool canStepLeft(Vector2D& PositionOfStep)const;
+  bool canStepRight(Vector2D& PositionOfStep)const;
+  bool canStepForwardRight(Vector2D& PositionOfStep)const;
+  bool canStepForwardLeft(Vector2D& PositionOfStep)const;
+  bool canStepBackwardRight(Vector2D& PositionOfStep)const;
+  bool canStepBackwardLeft(Vector2D& PositionOfStep)const;
 };
 
 #endif

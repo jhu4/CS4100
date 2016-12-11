@@ -11,14 +11,6 @@
 #include "Debug\DebugConsole.h"
 //#include "../../Debug/DebugConsole.h"
 
-//-------------------------------- ctor ---------------------------------------
-//-----------------------------------------------------------------------------
-Hu_TargetingSystem::Hu_TargetingSystem(AbstRaven_Bot* owner):
-	AbstTargetingSystem(owner)
-{}
-
-
-
 //----------------------------- Update ----------------------------------------
 // Differs from Buckland's only that we use the "Bully" tactic: target whichever
 // bot is weakest (when we have a choice.)

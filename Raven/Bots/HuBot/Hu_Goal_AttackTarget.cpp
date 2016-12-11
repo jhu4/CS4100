@@ -1,10 +1,10 @@
 #include "Hu_Goal_AttackTarget.h"
+#include "Hu_Goal_SnakeWalk.h"
+#include "Hu_Bot.h"
+#include "Hu_TargetingSystem.h"
 #include "../../goals/Goal_SeekToPosition.h"
 #include "../../goals/Goal_HuntTarget.h"
-#include "../../goals/Goal_DodgeSideToSide.h"
-
 #include "Debug\DebugConsole.h"
-
 
 //*HU Need to be modified
 void Hu_Goal_AttackTarget::Activate() {
@@ -29,9 +29,9 @@ void Hu_Goal_AttackTarget::Activate() {
 	{
 		//if the bot has space to strafe then do so
 		Vector2D dummy;
-		if (m_pOwner->canStepLeft(dummy) || m_pOwner->canStepRight(dummy))
+		if (((Hu_Bot*)m_pOwner)->canStepLeft(dummy) || ((Hu_Bot*)m_pOwner)->canStepRight(dummy))
 		{
-			AddSubgoal(new Goal_DodgeSideToSide(m_pOwner));
+			AddSubgoal(new Hu_Goal_SnakeWalk(m_pOwner,sidedodge));
 		}
 
 		//if not able to strafe, head directly at the target's position 
@@ -47,6 +47,6 @@ void Hu_Goal_AttackTarget::Activate() {
 		AddSubgoal(new Goal_HuntTarget(m_pOwner));
 	}
 
-	debug_con << "Hu_AttackTarget Activate" << "";
+	//debug_con << "Hu_AttackTarget Activate" << "";
 
 }

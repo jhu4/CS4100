@@ -14,7 +14,6 @@
 #include <list>
 #include "../../AbstTargetingSystem.h"
 
-
 class AbstRaven_Bot;
 
 class Hu_TargetingSystem : public AbstTargetingSystem
@@ -22,21 +21,18 @@ class Hu_TargetingSystem : public AbstTargetingSystem
 
 public:
 
-  Hu_TargetingSystem(AbstRaven_Bot* owner);
+	Hu_TargetingSystem(AbstRaven_Bot* owner) :AbstTargetingSystem(owner) {}
 
-  //each time this method is called the opponents in the owner's sensory 
-  //memory are examined and the closest  is assigned to m_pCurrentTarget.
-  //if there are no opponents that have had their memory records updated
-  //within the memory span of the owner then the current target is set
-  //to null
-  void       Update();
+	//each time this method is called the opponents in the owner's sensory 
+	//memory are examined and the closest  is assigned to m_pCurrentTarget.
+	//if there are no opponents that have had their memory records updated
+	//within the memory span of the owner then the current target is set
+	//to null
+	void       Update();
 
-  //*HU Check if a bot is within the range of the weapon and can be killed in one shot
-  bool		CanBeKilledInAShot(AbstRaven_Bot* bot);
-  void		setTarget(AbstRaven_Bot* bot);
+	//*HU Check if a bot is within the range of the weapon and can be killed in one shot
+	bool		CanBeKilledInAShot(AbstRaven_Bot* bot);
+	void		setTarget(AbstRaven_Bot* bot);
 };
-
-
-
 
 #endif

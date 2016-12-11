@@ -4,31 +4,23 @@
 #include "Hu_Raven_SensoryMemory.h"
 #include  "Hu_Goal_AttackTarget.h"
 
+//*HU
 void Hu_Goal_FightBack::Activate() {
 	m_iStatus = active;
 
-	//if this goal is reactivated then there may be some existing subgoals that
-	//must be removed
-	RemoveAllSubgoals();
-	
-	double threshold = 0.2;
-	double myHealth = Raven_Feature::Health(m_pOwner);
-	AbstRaven_Bot* enemey = ((Hu_Raven_SensoryMemory*)m_pOwner->GetSensoryMem())->getLastAttack();
+	//get the last attacker saved in my Hu_Raven_SensoryMemory
+	AbstRaven_Bot* enemy = ((Hu_Raven_SensoryMemory*)m_pOwner->GetSensoryMem())->getLastAttack();
 
-	if (Raven_Feature::Health(enemey) > myHealth) {
-		m_iStatus = failed;
-		return;
-	}
-
-	((Hu_TargetingSystem*)m_pOwner->GetTargetSys())->setTarget(enemey);
-	AddSubgoal(new Hu_Goal_AttackTarget(m_pOwner));
+	((Hu_TargetingSystem*)m_pOwner->GetTargetSys())->setTarget(enemy);
 }
 
 int  Hu_Goal_FightBack::Process() {
 	ActivateIfInactive();
 
-	m_iStatus = ProcessSubgoals();
-
+	if (m_pOwner->GetTargetSys()->GetTarget()->isDead() || !m_pOwner->GetSensoryMem()->isUnderAttack()) {
+		m_iStatus = completed;
+	}
+	
 	return m_iStatus;
 }
 
