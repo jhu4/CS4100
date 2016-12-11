@@ -54,14 +54,14 @@ int  Hu_Goal_GetItem::Process() {
 		RemoveAllSubgoals();
 
 		fightbackon = true;
-		debug_con << "GETITEM::FIGHTBACK " << "";
+		//debug_con << "GETITEM::FIGHTBACK " << "";
 		AddSubgoal(new Hu_Goal_FightBack(m_pOwner));
 		
 		
 		Vector2D dummy;
 		if (((Hu_Bot*)m_pOwner)->canStepBackwardLeft(dummy) || ((Hu_Bot*)m_pOwner)->canStepBackwardRight(dummy))
 		{
-			debug_con << "GETITEM::SNAKEWALK" << "";
+			//debug_con << "GETITEM::SNAKEWALK" << "";
 			AddSubgoal(new Hu_Goal_SnakeWalk(m_pOwner, snakewalk));
 		}
 	}

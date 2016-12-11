@@ -44,7 +44,7 @@ void Hu_Goal_SnakeWalk::Activate()
 		{
 			if (((Hu_Bot*)m_pOwner)->canStepBackwardRight(m_vStrafeTarget))
 			{
-				//AddSubgoal(new Goal_SeekToPosition(m_pOwner, m_vStrafeTarget));
+				
 				m_pOwner->GetSteering()->SetTarget(m_vStrafeTarget);
 			}
 			else
@@ -58,7 +58,7 @@ void Hu_Goal_SnakeWalk::Activate()
 		{
 			if (((Hu_Bot*)m_pOwner)->canStepBackwardLeft(m_vStrafeTarget))
 			{
-				//AddSubgoal(new Goal_SeekToPosition(m_pOwner, m_vStrafeTarget));
+				
 				m_pOwner->GetSteering()->SetTarget(m_vStrafeTarget);
 			}
 			else
