@@ -156,7 +156,9 @@ bool Hu_Bot::HandleMessage(const Telegram& msg)
 
 		AbstRaven_Bot* pShooter = (AbstRaven_Bot*)EntityManager::Instance()->GetEntityFromID(msg.Sender);
 		GetSensoryMem()->UpdateWithDamageSource(pShooter, damage);	
-
+		//*HU added my own attacker record
+		((Hu_Raven_SensoryMemory*)GetSensoryMem())->recordAttackSource(pShooter);
+		
 		//if this bot is now dead let the shooter know
 		if (isDead())
 		{

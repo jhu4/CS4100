@@ -34,13 +34,13 @@ Bot_AimPersistance = 0.5
 Bot_MemorySpan = 5
 
 --goal tweakers
-Bot_HealthGoalTweaker     = 1.2
-Bot_ShotgunGoalTweaker    = 0.6
-Bot_RailgunGoalTweaker    = 0.5
+Bot_HealthGoalTweaker     = 1.0
+Bot_ShotgunGoalTweaker    = 0.3
+Bot_RailgunGoalTweaker    = 0.3
 Bot_RocketLauncherTweaker = 0.6
-Bot_ExploreTweaker		  = 0.2
+Bot_ExploreTweaker		  = 0.0
 Bot_AggroGoalTweaker      = 0.8
-Bot_StealHealthTweaker	  = 0.7
+Bot_StealHealthTweaker	  = 0.6
 -------------------------[[ steering parameters ]]-----------------------------
 -------------------------------------------------------------------------------
 

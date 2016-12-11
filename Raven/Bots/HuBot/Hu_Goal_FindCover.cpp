@@ -1,9 +1,9 @@
-#include "Hu_Goal_AvoidMore.h"
+#include "Hu_Goal_FindCover.h"
 
 
 
 
-void Hu_Goal_AvoidMore::Activate() {
+void Hu_Goal_FindCover::Activate() {
 	m_iStatus = active;
 
 	//if this goal is reactivated then there may be some existing subgoals that
@@ -11,10 +11,10 @@ void Hu_Goal_AvoidMore::Activate() {
 	RemoveAllSubgoals();
 }
 
-int  Hu_Goal_AvoidMore::Process() {
+int  Hu_Goal_FindCover::Process() {
 	return 1;
 }
 
-void Hu_Goal_AvoidMore::Terminate() {
+void Hu_Goal_FindCover::Terminate() {
 
 }

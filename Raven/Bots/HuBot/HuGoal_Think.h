@@ -33,6 +33,7 @@ public:
   //*HU added addGoal functions
   void AddGoal_StealHealth(AbstRaven_Bot* target_bot, Trigger<AbstRaven_Bot>* health_pack);
   void AddGoal_Hu_AttackTarget();
+  void AddGoal_GetItem(int ItemType, std::vector<Trigger<AbstRaven_Bot>*> healthPacks);
 };
 
 

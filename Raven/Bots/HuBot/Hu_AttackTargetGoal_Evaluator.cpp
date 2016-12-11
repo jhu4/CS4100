@@ -6,14 +6,20 @@
 #include "HuGoal_Think.h"
 #include "../../goals/Raven_Feature.h"
 
-//*HU
+//*HU modified function
 double Hu_AttackTargetGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* pBot)
 {
 	double Desirability = 0.0;
 
+	//*HU
+	int enemiesInFOV = ((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->NumberBotInFOV();
+	double enemiesHealth = ((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->getHealthOfEnemiesInFOV();
+	double enemiesStrength = ((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->getStrengthOfEnemiesInFOV();
+	double myHealth = Raven_Feature::Health(pBot);
+	double myStrength = Raven_Feature::TotalWeaponStrength(pBot);
 
-	//if more than one bot is in FOV do not attack
-	if (((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->NumberBotInFOV() > 1) {
+	//do not attack group of enemies or higher health enemies 
+	if (enemiesInFOV >= 2 && !suvivialCalculator(myHealth,myStrength,enemiesHealth,enemiesStrength,enemiesInFOV)){
 		return 0;
 	}
 
@@ -24,10 +30,7 @@ double Hu_AttackTargetGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* pBot)
 		
 		AbstRaven_Bot* enemy = pBot->GetTargetBot();
 
-		Desirability = Tweaker *
-			Raven_Feature::Health(pBot) *
-			Raven_Feature::TotalWeaponStrength(pBot) *
-			(1 - Raven_Feature::Health(enemy));
+		Desirability = Tweaker * myHealth * myStrength * (1-enemiesHealth) * (1-enemiesStrength);
 
 		//bias the value according to the personality of the bot
 		Desirability *= m_dCharacterBias;
@@ -51,4 +54,18 @@ void Hu_AttackTargetGoal_Evaluator::RenderInfo(Vector2D Position, AbstRaven_Bot*
 
 	std::string s = ttos(Raven_Feature::Health(pBot)) + ", " + ttos(Raven_Feature::TotalWeaponStrength(pBot));
 	gdi->TextAtPos(Position + Vector2D(0, 12), s);
+}
+
+bool Hu_AttackTargetGoal_Evaluator::suvivialCalculator(double myhealth,double mystrength, double theirhealth, double theirstrength, int numOfEnemies) {
+	if (myhealth > theirhealth && mystrength > theirstrength) {
+		return true;
+	}
+	else if (myhealth > theirhealth && mystrength<theirstrength && mystrength > (0.5*theirstrength) && numOfEnemies == 1){
+		return true;
+	}
+	else if(myhealth > theirhealth && mystrength<theirstrength && mystrength>(0.7*theirstrength) && numOfEnemies == 2){
+		return true;
+	}
+
+	return false;
 }

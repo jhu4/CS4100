@@ -38,8 +38,7 @@ double Hu_StealHealthGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* bot) {
 	const double tweaker = 1;
 	
 
-	double desirability = tweaker *
-		(1 - Raven_Feature::Health(closest_opponent) * Raven_Feature::Health(closest_opponent)) *
+	double desirability = tweaker * (1 - Raven_Feature::Health(closest_opponent)) *
 		(1 - Raven_Feature::DistanceToItem(closest_opponent,type_health));
 
 	Clamp(desirability, 0, 1);

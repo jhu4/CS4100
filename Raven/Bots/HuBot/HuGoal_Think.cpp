@@ -18,6 +18,8 @@
 //*HU my upgraded Goals
 #include "Hu_Goal_AttackTarget.h"
 #include "Hu_AttackTargetGoal_Evaluator.h"
+#include "Hu_Goal_GetItem.h"
+#include "Hu_GetHealthGoal_Evaluator.h"
 
 #include "../../goals/GetWeaponGoal_Evaluator.h"
 #include "../../goals/GetHealthGoal_Evaluator.h"
@@ -27,32 +29,28 @@
 
 HuGoal_Think::HuGoal_Think(AbstRaven_Bot* pBot):Goal_Think (pBot)
 {
-  // load priorities from script
-  Hu_BotScriptor* pMyScript = Hu_BotScriptor::Instance();
-  double HealthBias = pMyScript->GetDouble("Bot_HealthGoalTweaker");
-  double ShotgunBias = pMyScript->GetDouble("Bot_ShotgunGoalTweaker");
-  double RocketLauncherBias = pMyScript->GetDouble("Bot_RocketLauncherTweaker");
-  double RailgunBias = pMyScript->GetDouble("Bot_RailgunGoalTweaker");
-  double ExploreBias = pMyScript->GetDouble("Bot_ExploreTweaker");
-  double AttackBias = pMyScript->GetDouble("Bot_AggroGoalTweaker");
-  //*HU
-  double StealHealthBias = pMyScript->GetDouble("Bot_StealHealthTweaker");
+  //*HU change to my lua scriptor
+  double HealthBias = Hu_script->GetDouble("Bot_HealthGoalTweaker");
+  double ShotgunBias = Hu_script->GetDouble("Bot_ShotgunGoalTweaker");
+  double RocketLauncherBias = Hu_script->GetDouble("Bot_RocketLauncherTweaker");
+  double RailgunBias = Hu_script->GetDouble("Bot_RailgunGoalTweaker");
+  double AttackBias = Hu_script->GetDouble("Bot_AggroGoalTweaker");
+  double StealHealthBias = Hu_script->GetDouble("Bot_StealHealthTweaker");
   // get rid of the evaluators added by the superclass
   m_Evaluators.clear();
 
-  //create the evaluator objects
-  m_Evaluators.push_back(new GetHealthGoal_Evaluator(HealthBias));
-  m_Evaluators.push_back(new ExploreGoal_Evaluator(ExploreBias));
-  //*HU change AttackTargetGoal_Evaluator to my version
+  //*HU
+  m_Evaluators.push_back(new Hu_StealHealthGoal_Evaluator(StealHealthBias));
+  m_Evaluators.push_back(new Hu_GetHealthGoal_Evaluator(HealthBias,pBot));
   m_Evaluators.push_back(new Hu_AttackTargetGoal_Evaluator(AttackBias));
+
   m_Evaluators.push_back(new GetWeaponGoal_Evaluator(ShotgunBias,
                                                      type_shotgun));
   m_Evaluators.push_back(new GetWeaponGoal_Evaluator(RailgunBias,
                                                      type_rail_gun));
   m_Evaluators.push_back(new GetWeaponGoal_Evaluator(RocketLauncherBias,
                                                      type_rocket_launcher));
-  //*HU
-  m_Evaluators.push_back(new Hu_StealHealthGoal_Evaluator(StealHealthBias));
+  
 }
 
 //----------------------------- dtor ------------------------------------------
@@ -81,5 +79,14 @@ void HuGoal_Think::AddGoal_Hu_AttackTarget()
 	{
 		RemoveAllSubgoals();
 		AddSubgoal(new Hu_Goal_AttackTarget(m_pOwner));
+	}
+}
+
+void HuGoal_Think::AddGoal_GetItem(int ItemType, std::vector<Trigger<AbstRaven_Bot>*> healthpacks)
+{
+	if (notPresent(ItemTypeToGoalType(ItemType)))
+	{
+		RemoveAllSubgoals();
+		AddSubgoal(new Hu_Goal_GetItem(m_pOwner, ItemType, healthpacks));
 	}
 }
