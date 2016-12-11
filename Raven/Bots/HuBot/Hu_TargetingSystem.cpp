@@ -108,3 +108,8 @@ bool Hu_TargetingSystem::CanBeKilledInAShot(AbstRaven_Bot* bot) {
 
 	return false;
 }
+
+//*HU
+void Hu_TargetingSystem::setTarget(AbstRaven_Bot* bot) {
+	m_pCurrentTarget = bot;
+}

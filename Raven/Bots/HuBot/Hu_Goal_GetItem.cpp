@@ -1,4 +1,5 @@
 #include "Hu_Goal_GetItem.h"
+#include "Hu_Goal_FightBack.h"
 #include "../../AbstRaven_Bot.h"
 #include "../../goals/Goal_Wander.h"
 #include "../../goals/Goal_MoveToPosition.h"
@@ -52,8 +53,12 @@ int  Hu_Goal_GetItem::Process() {
 		Terminate();
 	}
 	//*HU if bot is under attack 
-	if (m_pOwner->GetSensoryMem()->isUnderAttack()) {
+	if (m_pOwner->GetSensoryMem()->isUnderAttack() && !fightbackon) {
+		fightbackon = true;
 		m_pOwner->GetSteering()->WanderOn();
+		debug_con << "GETITEM::FIGHTBACK ON" << "";
+		AddSubgoal(new Hu_Goal_FightBack(m_pOwner));
+
 	}
 
 	//process the subgoals

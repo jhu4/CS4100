@@ -55,6 +55,7 @@ void Hu_Raven_SensoryMemory::updateAttackerMap() {
 //*HU record the dmg source
 void Hu_Raven_SensoryMemory::recordAttackSource(AbstRaven_Bot* enemy) {
 	
+	lastAttack = enemy;
 	//if attacker is alive 	
 	if (me!=enemy && enemy->isAlive()) {
 		AttackerMap::iterator record = attackermap.find(enemy);
@@ -107,5 +108,5 @@ int Hu_Raven_SensoryMemory::getAttackerNum() {
 
 //*HU get the latest attacker
 AbstRaven_Bot* Hu_Raven_SensoryMemory::getLastAttack() {
-	return attackermap.end()->first;
+	return lastAttack;
 }

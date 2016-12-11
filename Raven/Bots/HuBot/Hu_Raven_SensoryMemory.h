@@ -40,10 +40,12 @@ private:
 	typedef std::map<AbstRaven_Bot*, AttackerRecord> AttackerMap;
 	
 	AttackerMap attackermap;
+	AbstRaven_Bot* lastAttack;
 	AbstRaven_Bot* me;
 	std::vector<AbstRaven_Bot*> enemiesInFOV;
 	double enemiesHealth;
 	double enemiesStrength;
+
 public: 
 	Hu_Raven_SensoryMemory(AbstRaven_Bot* owner, double MemorySpan):Raven_SensoryMemory(owner,MemorySpan)
 		,me(owner)

@@ -11,12 +11,14 @@ private:
 	std::vector<Trigger<AbstRaven_Bot>*> healths;
 	Trigger<AbstRaven_Bot>* targethealthpack;
 	int type;
+	bool fightbackon;
 
 public:
 	//*HU overload constructor
 	Hu_Goal_GetItem(AbstRaven_Bot* bot, int item, std::vector<Trigger<AbstRaven_Bot>*> health) :Goal_GetItem(bot, item)
 		,healths(health)
-		,type(item){};
+		,type(item)
+		,fightbackon(false){};
 
 	Hu_Goal_GetItem(AbstRaven_Bot* bot, int item) :Goal_GetItem(bot, item){}
 
