@@ -64,3 +64,21 @@ void Hu_Raven_SensoryMemory::recordAttackSource(AbstRaven_Bot* enemy) {
 	}
 }
 
+//*HU find the lowest health attack in the attacker map
+AbstRaven_Bot* Hu_Raven_SensoryMemory::lowestHealthAttacker() {
+	AttackerMap::iterator it;
+	double health = MaxDouble;
+	AbstRaven_Bot* bot;
+	for (it = attackermap.begin(); it != attackermap.end(); it++) {
+		//if the bot is dead
+		if (it->first->isDead()) {
+			attackermap.erase(it->first);
+		}
+		if (it->second.health <= health) {
+			health = it->second.health;
+			bot = (AbstRaven_Bot*)it->first;
+		}
+	}
+	debug_con << "Lowest health bot:" << bot->GetName() << "";
+	return bot;
+}

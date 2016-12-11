@@ -56,6 +56,7 @@ public:
 	double getStrengthOfEnemiesInFOV();
 	void updateAttackerMap();
 	void recordAttackSource(AbstRaven_Bot* enemy);
+	AbstRaven_Bot* lowestHealthAttacker();
 };
 
 

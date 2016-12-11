@@ -4,7 +4,7 @@
 
 #include "../../lua/Raven_Scriptor.h"
 #include "../../AbstRaven_Bot.h"
-#include "../../Raven_SensoryMemory.h"
+#include "Hu_Raven_SensoryMemory.h"
 #include "../../AbstWeaponSystem.h"
 #include "../../armory/Raven_Weapon.h"
 #include "../../Raven_ObjectEnumerations.h"
@@ -44,7 +44,11 @@ void Hu_TargetingSystem::Update()
 			m_pCurrentTarget = *curBot;
 			return;
 		}
-		
+
+		//*HU
+		if (m_pOwner->GetSensoryMem()->isUnderAttack()) {
+			m_pCurrentTarget = ((Hu_Raven_SensoryMemory*)m_pOwner->GetSensoryMem())->lowestHealthAttacker();
+		}
 		//double dist = Vec2DDistanceSq((*curBot)->Pos(), m_pOwner->Pos());
 		int health = (*curBot)->Health();
 
