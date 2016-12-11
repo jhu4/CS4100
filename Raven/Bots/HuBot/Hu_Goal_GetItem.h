@@ -23,6 +23,7 @@ public:
 	//*HU Overide function
 	void Activate();
 	int  Process();
+	void Terminate();
 	bool hasItemBeenStolen()const;
 	//*HU new functions
 	Trigger<AbstRaven_Bot>* getClosestHealthPack();

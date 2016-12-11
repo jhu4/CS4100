@@ -2,10 +2,12 @@
 #include "../../AbstRaven_Bot.h"
 #include "../../goals/Goal_Wander.h"
 #include "../../goals/Goal_MoveToPosition.h"
+#include "../../goals/Goal_DodgeSideToSide.h"
 #include "../../Raven_ObjectEnumerations.h"
 #include "../../navigation/Raven_PathPlanner.h"
 #include "../../Raven_Map.h"
 #include "../../Raven_Game.h"
+#include "../../AbstSteeringBehaviors.h"
 #include "Hu_Raven_SensoryMemory.h"
 #include "Debug\DebugConsole.h"
 
@@ -17,25 +19,27 @@ void Hu_Goal_GetItem::Activate()
 
 	m_pGiverTrigger = 0;
 
-	//*HU request the path to the position of the closet health
-	Trigger<AbstRaven_Bot>* healthpack = getClosestHealthPack();
-	if (healthpack == NULL) {
-		Terminate();
-	}
-
+	/*
 	if (m_iItemToGet == type_health) {	
+		//*HU request the path to the position of the closet health
+		Trigger<AbstRaven_Bot>* healthpack = getClosestHealthPack();
+		if (healthpack == NULL) {
+			Terminate();
+		}
+		debug_con << "REQUEST PATHING" << "";
+
 		m_pOwner->GetPathPlanner()->RequestPathToPosition(healthpack->Pos());
 	}
-	else {
+	else { */
 		m_pOwner->GetPathPlanner()->RequestPathToItem(m_iItemToGet);
-	}
+	//}
 	
 	
-
 	//the bot may have to wait a few update cycles before a path is calculated
 	//so for appearances sake it just wanders
 	AddSubgoal(new Goal_Wander(m_pOwner));
-
+	
+	
 }
 
 int  Hu_Goal_GetItem::Process() {
@@ -47,31 +51,29 @@ int  Hu_Goal_GetItem::Process() {
 		targethealthpack = NULL;
 		Terminate();
 	}
-
-	else
-	{
-		//process the subgoals
-		m_iStatus = ProcessSubgoals();
+	//*HU if bot is under attack 
+	if (m_pOwner->GetSensoryMem()->isUnderAttack()) {
+		m_pOwner->GetSteering()->WanderOn();
 	}
+
+	//process the subgoals
+	m_iStatus = ProcessSubgoals();
+	
 
 	return m_iStatus;
 }
 
+void Hu_Goal_GetItem::Terminate() {
+	m_pOwner->GetSteering()->WanderOff();
+	m_iStatus = completed;
+}
 
 bool Hu_Goal_GetItem::hasItemBeenStolen()const {
 	//if the target is health
-	if (targethealthpack) {
-		if (!targethealthpack->isActive() && m_pOwner->hasLOSto(targethealthpack->Pos())) {
-			return true;
-		}
-	}
-	else{//if the target is other thing
-		if (m_pGiverTrigger &&
-			!m_pGiverTrigger->isActive() &&
-			m_pOwner->hasLOSto(m_pGiverTrigger->Pos()))
-		{
-			return true;
-		}
+	if (m_pGiverTrigger &&
+		!m_pGiverTrigger->isActive())
+	{
+		return true;
 	}
 
 	return false;
@@ -102,7 +104,10 @@ Trigger<AbstRaven_Bot>* Hu_Goal_GetItem::getClosestHealthPack() {
 	}
 	
 	targethealthpack = healthpack;
+	if (healthpack) {
+		debug_con << "Healthpack exist" << "";
 
+	}
 	return healthpack;
 }
 

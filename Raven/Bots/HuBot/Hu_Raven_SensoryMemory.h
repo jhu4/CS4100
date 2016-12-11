@@ -57,6 +57,8 @@ public:
 	void updateAttackerMap();
 	void recordAttackSource(AbstRaven_Bot* enemy);
 	AbstRaven_Bot* lowestHealthAttacker();
+	int getAttackerNum();
+	AbstRaven_Bot* getLastAttack();
 };
 
 

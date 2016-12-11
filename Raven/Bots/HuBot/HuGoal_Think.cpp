@@ -8,6 +8,7 @@
 #include "Hu_BotScriptor.h"
 #include "Hu_Goal_StealHealth.h"
 #include "Hu_StealHealthGoal_Evaluator.h"
+#include "Hu_Goal_FightBack.h"
 
 #include "../../goals/Goal_MoveToPosition.h"
 #include "../../goals/Goal_Explore.h"
@@ -59,7 +60,7 @@ HuGoal_Think::~HuGoal_Think()
 {
 
 }
-
+//*HU
 void HuGoal_Think::AddGoal_StealHealth(AbstRaven_Bot* target_bot,Trigger<AbstRaven_Bot>* health_pack)
 {
 	debug_con << "AddGoal_StealHealth" << "";
@@ -72,7 +73,7 @@ void HuGoal_Think::AddGoal_StealHealth(AbstRaven_Bot* target_bot,Trigger<AbstRav
 
 }
 
-
+//*HU
 void HuGoal_Think::AddGoal_Hu_AttackTarget()
 {
 	if (notPresent(goal_attack_target))
@@ -82,11 +83,21 @@ void HuGoal_Think::AddGoal_Hu_AttackTarget()
 	}
 }
 
+//*HU
 void HuGoal_Think::AddGoal_GetItem(int ItemType, std::vector<Trigger<AbstRaven_Bot>*> healthpacks)
 {
 	if (notPresent(ItemTypeToGoalType(ItemType)))
 	{
 		RemoveAllSubgoals();
 		AddSubgoal(new Hu_Goal_GetItem(m_pOwner, ItemType, healthpacks));
+	}
+}
+
+//*HU
+void HuGoal_Think::AddGoal_FightBack() {
+	if (notPresent(Hu_goal_fight_back))
+	{
+		RemoveAllSubgoals();
+		AddSubgoal(new Hu_Goal_FightBack(m_pOwner));
 	}
 }

@@ -5,23 +5,24 @@
 #include "../../AbstRaven_Bot.h"
 #include "HuGoal_Think.h"
 #include "../../goals/Raven_Feature.h"
-
+#include "Debug\DebugConsole.h"
 //*HU modified function
 double Hu_AttackTargetGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* pBot)
 {
 	double Desirability = 0.0;
 
-	//*HU
-	int enemiesInFOV = ((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->NumberBotInFOV();
-	double enemiesHealth = ((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->getHealthOfEnemiesInFOV();
-	double enemiesStrength = ((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->getStrengthOfEnemiesInFOV();
+	//*HU this is too CPU consuming so I disabled them
+	//int enemiesInFOV = ((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->NumberBotInFOV();
+	//double enemiesHealth = ((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->getHealthOfEnemiesInFOV();
+	//double enemiesStrength = ((Hu_Raven_SensoryMemory*)pBot->GetSensoryMem())->getStrengthOfEnemiesInFOV();
 	double myHealth = Raven_Feature::Health(pBot);
 	double myStrength = Raven_Feature::TotalWeaponStrength(pBot);
 
+	
 	//do not attack group of enemies or higher health enemies 
-	if (enemiesInFOV >= 2 && !suvivialCalculator(myHealth,myStrength,enemiesHealth,enemiesStrength,enemiesInFOV)){
-		return 0;
-	}
+	//if (enemiesInFOV > 2){
+		//return 0;
+	//}
 
 	//only do the calculation if there is a target present
 	if (pBot->GetTargetSys()->isTargetPresent())
@@ -30,7 +31,7 @@ double Hu_AttackTargetGoal_Evaluator::CalculateDesirability(AbstRaven_Bot* pBot)
 		
 		AbstRaven_Bot* enemy = pBot->GetTargetBot();
 
-		Desirability = Tweaker * myHealth * myStrength * (1-enemiesHealth) * (1-enemiesStrength);
+		Desirability = Tweaker * myHealth * myStrength * Raven_Feature::Health(enemy);
 
 		//bias the value according to the personality of the bot
 		Desirability *= m_dCharacterBias;

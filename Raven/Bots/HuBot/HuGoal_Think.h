@@ -20,7 +20,7 @@
 
 const int Hu_goal_steal_health = 18;
 const int Hu_goal_avoid_more = 19;
-
+const int Hu_goal_fight_back = 20;
 class HuGoal_Think : public Goal_Think
 {
 
@@ -34,6 +34,7 @@ public:
   void AddGoal_StealHealth(AbstRaven_Bot* target_bot, Trigger<AbstRaven_Bot>* health_pack);
   void AddGoal_Hu_AttackTarget();
   void AddGoal_GetItem(int ItemType, std::vector<Trigger<AbstRaven_Bot>*> healthPacks);
+  void AddGoal_FightBack();
 };
 
 

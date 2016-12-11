@@ -46,9 +46,9 @@ void Hu_TargetingSystem::Update()
 		}
 
 		//*HU
-		if (m_pOwner->GetSensoryMem()->isUnderAttack()) {
-			m_pCurrentTarget = ((Hu_Raven_SensoryMemory*)m_pOwner->GetSensoryMem())->lowestHealthAttacker();
-		}
+		//if (m_pOwner->GetSensoryMem()->isUnderAttack()) {
+		//	m_pCurrentTarget = ((Hu_Raven_SensoryMemory*)m_pOwner->GetSensoryMem())->lowestHealthAttacker();
+		//}
 		//double dist = Vec2DDistanceSq((*curBot)->Pos(), m_pOwner->Pos());
 		int health = (*curBot)->Health();
 

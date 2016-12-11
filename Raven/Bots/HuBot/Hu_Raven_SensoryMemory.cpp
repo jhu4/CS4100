@@ -6,18 +6,34 @@
 #include "misc/cgdi.h"
 #include "misc/Stream_Utility_Functions.h"
 #include "Debug\DebugConsole.h"
-
+#include <vector>
 
 //*HU get the number of the bot in the view of sight and update other variables
 int Hu_Raven_SensoryMemory::NumberBotInFOV() {
+	enemiesInFOV = me->GetWorld()->GetAllBotsInFOV(me);
+
+	debug_con << "enemiesInFOV:" << enemiesInFOV.size() << "";
+
 	return enemiesInFOV.size();
 }
 
 double Hu_Raven_SensoryMemory::getHealthOfEnemiesInFOV() {
+	enemiesHealth = 0;
+	std::vector<AbstRaven_Bot*>::iterator it;
+	for (it = enemiesInFOV.begin(); it != enemiesInFOV.end(); it++) {
+		AbstRaven_Bot* bot = static_cast<AbstRaven_Bot*> (*it);
+		enemiesHealth += Raven_Feature::Health((AbstRaven_Bot*)(bot));
+	}
 	return enemiesHealth;
 }
 
 double Hu_Raven_SensoryMemory::getStrengthOfEnemiesInFOV() {
+	enemiesStrength = 0;
+	std::vector<AbstRaven_Bot*>::iterator it;
+	for (it = enemiesInFOV.begin(); it != enemiesInFOV.end(); it++) {
+		AbstRaven_Bot* bot = static_cast<AbstRaven_Bot*> (*it);
+		enemiesStrength += Raven_Feature::TotalWeaponStrength(bot);
+	}
 	return enemiesStrength;
 }
 
@@ -25,6 +41,7 @@ double Hu_Raven_SensoryMemory::getStrengthOfEnemiesInFOV() {
 //*HU update the attackermap in a frequency, kick out the dead attacker
 void Hu_Raven_SensoryMemory::updateAttackerMap() {
 	AttackerMap::iterator it;
+
 
 	for (it = attackermap.begin(); it != attackermap.end(); it++) {
 
@@ -81,4 +98,14 @@ AbstRaven_Bot* Hu_Raven_SensoryMemory::lowestHealthAttacker() {
 	}
 	debug_con << "Lowest health bot:" << bot->GetName() << "";
 	return bot;
+}
+
+//*HU get the number of attacker
+int Hu_Raven_SensoryMemory::getAttackerNum() {
+	return attackermap.size();
+}
+
+//*HU get the latest attacker
+AbstRaven_Bot* Hu_Raven_SensoryMemory::getLastAttack() {
+	return attackermap.end()->first;
 }

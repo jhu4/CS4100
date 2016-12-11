@@ -4,9 +4,9 @@
 
 -- originally constants in Raven_SteeringBehaviors
 --the radius of the constraining circle for the wander behavior
-WanderRad    = 1.2
+WanderRad    = 1.5
 --distance the wander circle is projected in front of the agent
-WanderDist   = 2.0
+WanderDist   = 5.0
 --the maximum amount of displacement along the circle each frame
 WanderJitterPerSec = 20.0
 
